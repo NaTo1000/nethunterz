@@ -1,6 +1,5 @@
 # iFINITEAi2025JESSICAi — Huntress Edition
 # ConductorX Clustered Super Orchestration Deployment
-version: "3.9"
 
 x-jessica-common: &jessica-common
   build:
