@@ -1,0 +1,87 @@
+# iFINITEAi2025JESSICAi — WiFi Pineapple Suite Configuration
+# Full PineAP suite capabilities for wireless operations
+
+pineap_core:
+  description: "WiFi Pineapple Access Point engine — rogue AP, beacon management, probe harvesting"
+  capabilities:
+    - beacon_response       # Respond to all probe requests
+    - ssid_pool             # Manage pool of target SSIDs
+    - probe_harvest         # Capture and log probe requests
+    - karma_attack          # KARMA-style rogue AP
+    - mana_attack           # MANA EAP relay attack
+    - loud_mode             # Broadcast all SSIDs in pool
+    - dogma_mode            # Auto-add probed SSIDs to pool
+
+  components:
+    hostapd:
+      binary: hostapd
+      config_template: /etc/hostapd/pineap.conf
+      capabilities: [ap_creation, wpa_enterprise, radius_proxy]
+
+    dnsmasq:
+      binary: dnsmasq
+      config_template: /etc/dnsmasq.d/pineap.conf
+      capabilities: [dhcp_server, dns_server, dns_spoof, captive_portal]
+
+    iptables:
+      binary: iptables
+      capabilities: [nat, forwarding, traffic_redirect, packet_filter]
+
+recon_modules:
+  - name: site_survey
+    description: "Scan and catalogue all nearby wireless networks"
+    capabilities: [ap_scan, client_scan, signal_strength, channel_map]
+
+  - name: probe_listener
+    description: "Passive listener for client probe requests"
+    capabilities: [probe_capture, ssid_history, device_fingerprint]
+
+  - name: client_tracker
+    description: "Track client devices across APs and time"
+    capabilities: [mac_tracking, movement_pattern, association_log]
+
+attack_modules:
+  - name: deauth
+    description: "Deauthentication attack to disconnect clients"
+    tool: mdk4
+    capabilities: [deauth_broadcast, deauth_targeted, channel_hop]
+
+  - name: evil_twin
+    description: "Create convincing evil twin AP"
+    capabilities: [ap_clone, captive_portal, credential_capture, ssl_strip]
+
+  - name: handshake_capture
+    description: "Capture WPA/WPA2 4-way handshake"
+    tool: aircrack-ng
+    capabilities: [handshake_capture, pmkid_capture]
+
+  - name: wps_attack
+    description: "WPS PIN brute force"
+    tool: reaver
+    capabilities: [wps_brute, pixie_dust]
+
+networking:
+  interfaces:
+    monitor_mode:
+      description: "Wireless interfaces in monitor mode for passive capture"
+      auto_detect: true
+      supported_chipsets: [atheros, realtek_rtl8812au, ralink, mediatek]
+
+    managed_mode:
+      description: "Wireless interfaces for AP creation and client connection"
+      auto_detect: true
+
+    wired:
+      description: "Ethernet interfaces for upstream connectivity"
+      auto_detect: true
+
+  routing:
+    ip_forwarding: true
+    nat_masquerade: true
+    transparent_proxy: true
+
+logging:
+  probe_log: /opt/jessica/logs/pineap/probes.log
+  handshake_dir: /opt/jessica/data/pineap/handshakes/
+  client_db: /opt/jessica/data/pineap/clients.db
+  session_log: /opt/jessica/logs/pineap/sessions.log

@@ -1,0 +1,99 @@
+# iFINITEAi2025JESSICAi — BlackArch Security Suite Configuration
+# Extended toolset from the BlackArch repository
+
+reconnaissance:
+  - name: amass
+    binary: amass
+    description: "In-depth Attack Surface Mapping"
+    capabilities: [subdomain_enum, dns_intel, certificate_transparency]
+
+  - name: subfinder
+    binary: subfinder
+    description: "Passive subdomain discovery"
+    capabilities: [subdomain_enum, passive_recon]
+
+  - name: masscan
+    binary: masscan
+    description: "Mass IP port scanner (10M packets/sec)"
+    capabilities: [mass_port_scan, syn_scan]
+
+  - name: shodan
+    binary: shodan
+    description: "Shodan CLI for internet device search"
+    capabilities: [device_search, banner_grab, vulnerability_lookup]
+
+exploitation_extended:
+  - name: bloodhound
+    binary: bloodhound
+    description: "Active Directory attack path mapping"
+    capabilities: [ad_enum, attack_path, privilege_escalation_path]
+
+  - name: responder
+    binary: responder
+    description: "LLMNR/NBT-NS/mDNS poisoner"
+    capabilities: [llmnr_poison, ntlm_capture, wpad_proxy]
+
+  - name: covenant
+    binary: covenant
+    description: ".NET C2 framework"
+    capabilities: [c2_framework, implant_management]
+
+reverse_engineering:
+  - name: ghidra
+    binary: ghidra
+    description: "NSA reverse engineering framework"
+    capabilities: [disassembly, decompilation, binary_analysis]
+
+  - name: radare2
+    binary: r2
+    description: "Reverse engineering and binary analysis"
+    capabilities: [disassembly, debugging, binary_patching]
+
+cryptography:
+  - name: hashid
+    binary: hashid
+    description: "Hash type identifier"
+    capabilities: [hash_identification]
+
+  - name: hash-identifier
+    binary: hash-identifier
+    description: "Identify different types of hashes"
+    capabilities: [hash_identification]
+
+steganography:
+  - name: steghide
+    binary: steghide
+    description: "Hide data in various image and audio files"
+    capabilities: [data_hide, data_extract]
+
+  - name: stegsolve
+    binary: stegsolve
+    description: "Image steganography analysis"
+    capabilities: [image_analysis, bit_plane_analysis]
+
+social_engineering:
+  - name: setoolkit
+    binary: setoolkit
+    description: "Social-Engineer Toolkit"
+    capabilities: [phishing, credential_harvest, hta_attack]
+
+  - name: gophish
+    binary: gophish
+    description: "Open-source phishing toolkit"
+    capabilities: [phishing_campaign, email_template, landing_page]
+
+network_tools:
+  - name: proxychains
+    binary: proxychains4
+    description: "Force TCP connections through proxy"
+    capabilities: [proxy_chain, anonymization]
+
+  - name: chisel
+    binary: chisel
+    description: "Fast TCP/UDP tunnel over HTTP"
+    capabilities: [tunneling, port_forward, socks_proxy]
+
+  - name: ligolo-ng
+    binary: ligolo-ng
+    description: "Advanced tunneling tool"
+    capabilities: [tunneling, pivot]

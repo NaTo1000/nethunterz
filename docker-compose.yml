@@ -1,0 +1,123 @@
+# iFINITEAi2025JESSICAi — Huntress Edition
+# ConductorX Clustered Super Orchestration Deployment
+version: "3.9"
+
+x-jessica-common: &jessica-common
+  build:
+    context: .
+    dockerfile: Dockerfile
+  restart: unless-stopped
+  environment: &jessica-env
+    JESSICA_MODE: autonomous
+    CHIMERA_STACK_DEPTH: "3"
+    CHIMERA_STACK_WIDTH: "3"
+    CHIMERA_STACK_LAYERS: "3"
+    CONDUCTORX_CLUSTER: "true"
+    HF_TOKEN: "${HF_TOKEN:-}"
+    HF_MODEL: "${HF_MODEL:-}"
+  volumes:
+    - jessica-data:/opt/jessica/data
+    - jessica-logs:/opt/jessica/logs
+    - /dev/bus/usb:/dev/bus/usb
+  privileged: true
+  network_mode: host
+
+services:
+  # ────────────────────────────────────────
+  # ConductorX — Cluster Super Orchestrator
+  # ────────────────────────────────────────
+  conductorx:
+    <<: *jessica-common
+    container_name: jessica-conductorx
+    command: ["--mode", "conductor", "--bind", "0.0.0.0:9000"]
+    environment:
+      <<: *jessica-env
+      JESSICA_ROLE: conductor
+      CONDUCTORX_REPLICAS: "3"
+    ports:
+      - "9000:9000"
+    healthcheck:
+      test: ["CMD", "jessica", "health", "--component", "conductorx"]
+      interval: 15s
+      timeout: 5s
+      retries: 3
+
+  # ────────────────────────────────────────
+  # CHAiMERA — Chained Workflow Engine
+  # ────────────────────────────────────────
+  chimera:
+    <<: *jessica-common
+    container_name: jessica-chimera
+    command: ["--mode", "chimera", "--bind", "0.0.0.0:9001"]
+    environment:
+      <<: *jessica-env
+      JESSICA_ROLE: chimera
+    ports:
+      - "9001:9001"
+    depends_on:
+      conductorx:
+        condition: service_healthy
+
+  # ────────────────────────────────────────
+  # Orchestrator Workers (scalable)
+  # ────────────────────────────────────────
+  orchestrator-worker:
+    <<: *jessica-common
+    deploy:
+      replicas: 3
+    command: ["--mode", "worker", "--conductor", "conductorx:9000"]
+    environment:
+      <<: *jessica-env
+      JESSICA_ROLE: worker
+    depends_on:
+      conductorx:
+        condition: service_healthy
+      chimera:
+        condition: service_started
+
+  # ────────────────────────────────────────
+  # Autonomous Monitor
+  # ────────────────────────────────────────
+  monitor:
+    <<: *jessica-common
+    container_name: jessica-monitor
+    command: ["--mode", "monitor", "--all-interfaces"]
+    environment:
+      <<: *jessica-env
+      JESSICA_ROLE: monitor
+      MONITOR_USB: "true"
+      MONITOR_WIFI: "true"
+      MONITOR_PORTS: "true"
+      MONITOR_DRIVERS: "true"
+    cap_add:
+      - NET_ADMIN
+      - NET_RAW
+      - SYS_ADMIN
+    devices:
+      - /dev/bus/usb:/dev/bus/usb
+    depends_on:
+      conductorx:
+        condition: service_healthy
+
+  # ────────────────────────────────────────
+  # AI Transformer Bot Layer
+  # ────────────────────────────────────────
+  ai-transformer:
+    <<: *jessica-common
+    container_name: jessica-ai
+    command: ["--mode", "ai", "--hf-models", "all"]
+    environment:
+      <<: *jessica-env
+      JESSICA_ROLE: ai_transformer
+      HF_HOME: /opt/jessica/data/hf_cache
+    volumes:
+      - jessica-data:/opt/jessica/data
+      - jessica-hf-cache:/opt/jessica/data/hf_cache
+    depends_on:
+      conductorx:
+        condition: service_healthy
+
+volumes:
+  jessica-data:
+  jessica-logs:
+  jessica-hf-cache:

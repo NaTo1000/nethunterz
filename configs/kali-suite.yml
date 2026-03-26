@@ -1,0 +1,156 @@
+# iFINITEAi2025JESSICAi — Kali Security Suite Configuration
+# Tools are grouped by category for CHAiMERA workflow chains
+
+information_gathering:
+  - name: nmap
+    binary: nmap
+    description: "Network mapper — host discovery, port scanning, service/OS detection"
+    capabilities: [host_discovery, port_scan, service_detection, os_fingerprint, script_scan]
+    default_args: ["-sV", "-sC", "--open"]
+
+  - name: recon-ng
+    binary: recon-ng
+    description: "Full-featured web reconnaissance framework"
+    capabilities: [osint, subdomain_enum, contact_harvest]
+
+  - name: theharvester
+    binary: theHarvester
+    description: "Email, subdomain, and name harvester"
+    capabilities: [email_harvest, subdomain_enum, dns_enum]
+
+  - name: dnsrecon
+    binary: dnsrecon
+    description: "DNS enumeration and zone transfer"
+    capabilities: [dns_enum, zone_transfer]
+
+vulnerability_analysis:
+  - name: nikto
+    binary: nikto
+    description: "Web server vulnerability scanner"
+    capabilities: [web_vuln_scan, cgi_scan, server_misconfiguration]
+    default_args: ["-Tuning", "x"]
+
+  - name: sqlmap
+    binary: sqlmap
+    description: "Automatic SQL injection detection and exploitation"
+    capabilities: [sqli_detection, sqli_exploitation, db_enumeration]
+
+  - name: wpscan
+    binary: wpscan
+    description: "WordPress security scanner"
+    capabilities: [wordpress_vuln_scan, plugin_enum, theme_enum]
+
+exploitation:
+  - name: metasploit
+    binary: msfconsole
+    description: "Penetration testing framework"
+    capabilities: [exploit, payload_gen, post_exploitation, auxiliary]
+    service: postgresql
+    rpc_port: 55553
+
+  - name: searchsploit
+    binary: searchsploit
+    description: "Exploit database search"
+    capabilities: [exploit_search]
+
+sniffing_spoofing:
+  - name: wireshark
+    binary: tshark
+    description: "Network protocol analyzer (CLI via tshark)"
+    capabilities: [packet_capture, protocol_analysis, deep_inspection]
+
+  - name: ettercap
+    binary: ettercap
+    description: "Comprehensive suite for MITM attacks"
+    capabilities: [arp_spoofing, dns_spoofing, mitm, packet_filter]
+    default_args: ["-T", "-q"]
+
+  - name: bettercap
+    binary: bettercap
+    description: "Swiss Army knife for network attacks and monitoring"
+    capabilities: [arp_spoofing, dns_spoofing, wifi_deauth, ble_scan, http_proxy]
+
+  - name: arpwatch
+    binary: arpwatch
+    description: "Ethernet/IP address pairing monitor"
+    capabilities: [arp_monitor, mac_tracking]
+
+  - name: tcpdump
+    binary: tcpdump
+    description: "Command-line packet analyzer"
+    capabilities: [packet_capture, traffic_filter]
+
+wireless:
+  - name: aircrack-ng
+    binary: aircrack-ng
+    description: "WiFi security auditing suite"
+    capabilities: [wep_crack, wpa_crack, packet_injection, monitor_mode]
+
+  - name: reaver
+    binary: reaver
+    description: "WPS brute-force attack tool"
+    capabilities: [wps_attack]
+
+  - name: wifite
+    binary: wifite
+    description: "Automated wireless auditor"
+    capabilities: [auto_wifi_audit]
+
+passwords:
+  - name: john
+    binary: john
+    description: "John the Ripper password cracker"
+    capabilities: [password_crack, hash_detect]
+
+  - name: hashcat
+    binary: hashcat
+    description: "Advanced password recovery (GPU)"
+    capabilities: [password_crack, hash_crack, gpu_acceleration]
+
+  - name: hydra
+    binary: hydra
+    description: "Fast network logon cracker"
+    capabilities: [brute_force, protocol_auth_attack]
+
+web_applications:
+  - name: gobuster
+    binary: gobuster
+    description: "Directory/file & DNS brute-force tool"
+    capabilities: [dir_brute, dns_brute, vhost_brute]
+
+  - name: wfuzz
+    binary: wfuzz
+    description: "Web application fuzzer"
+    capabilities: [web_fuzz, parameter_brute]
+
+  - name: dirb
+    binary: dirb
+    description: "Web content scanner"
+    capabilities: [dir_scan, web_content_discovery]
+
+post_exploitation:
+  - name: crackmapexec
+    binary: crackmapexec
+    description: "Post-exploitation tool for large Active Directory networks"
+    capabilities: [smb_enum, winrm_exec, mssql_exec, credential_relay]
+
+  - name: evil-winrm
+    binary: evil-winrm
+    description: "Ultimate WinRM shell"
+    capabilities: [winrm_shell, file_transfer, powershell]
+
+  - name: impacket
+    binary: impacket-scripts
+    description: "Collection of Python classes for network protocols"
+    capabilities: [smb_relay, ntlm_relay, kerberos, wmi_exec]
+
+forensics:
+  - name: volatility
+    binary: vol.py
+    description: "Memory forensics framework"
+    capabilities: [memory_analysis, process_enum, network_forensics]
+
+  - name: binwalk
+    binary: binwalk
+    description: "Firmware analysis tool"
+    capabilities: [firmware_extract, signature_scan]

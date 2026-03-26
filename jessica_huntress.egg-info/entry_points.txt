@@ -1,0 +1,2 @@
+[console_scripts]
+jessica = jessica.cli:main

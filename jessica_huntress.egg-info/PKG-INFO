@@ -1,3 +1,32 @@
+Metadata-Version: 2.4
+Name: jessica-huntress
+Version: 2025.1.0
+Summary: iFINITEAi2025JESSICAi — Huntress Edition: Autonomous security platform with CHAiMERA orchestration
+Author: NaTo1000
+License: MIT
+Keywords: security,pentesting,orchestration,ai,nethunter
+Classifier: Development Status :: 4 - Beta
+Classifier: Intended Audience :: Information Technology
+Classifier: Topic :: Security
+Classifier: Programming Language :: Python :: 3.11
+Classifier: Programming Language :: Python :: 3.12
+Requires-Python: >=3.11
+Description-Content-Type: text/markdown
+Requires-Dist: pyyaml>=6.0
+Requires-Dist: click>=8.1
+Requires-Dist: rich>=13.0
+Requires-Dist: httpx>=0.27
+Requires-Dist: psutil>=5.9
+Requires-Dist: netifaces2>=0.0.22
+Provides-Extra: ai
+Requires-Dist: huggingface-hub>=0.23; extra == "ai"
+Requires-Dist: transformers>=4.40; extra == "ai"
+Requires-Dist: torch>=2.2; extra == "ai"
+Provides-Extra: dev
+Requires-Dist: pytest>=8.0; extra == "dev"
+Requires-Dist: pytest-asyncio>=0.23; extra == "dev"
+Requires-Dist: ruff>=0.4; extra == "dev"
+
 # iFINITEAi2025JESSICAi — Huntress Edition
 
 > **Next-generation autonomous security platform** with full Kali + BlackArch + WiFi Pineapple suites, CHAiMERA chained-workflow orchestration, ConductorX clustered super orchestration, and AI-powered transformer bots.
