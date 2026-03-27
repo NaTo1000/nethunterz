@@ -93,7 +93,6 @@ jobs:
             -project ${{ env.PROJECT }} \
             -scheme ${{ env.SCHEME }} \
             -destination "${{ env.DESTINATION }}" \
-            -testPlan UnitTests \
             -resultBundlePath TestResults.xcresult \
             CODE_SIGN_IDENTITY="" \
             CODE_SIGNING_REQUIRED=NO \
