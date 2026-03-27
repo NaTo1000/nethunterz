@@ -19,6 +19,8 @@ jobs:
     runs-on: ubuntu-latest
     timeout-minutes: 30
     environment: ${{ github.event.inputs.environment || 'production' }}
+    permissions:
+      contents: read
 
     steps:
       - name: Checkout repository
@@ -88,6 +90,8 @@ jobs:
     runs-on: ubuntu-latest
     timeout-minutes: 30
     environment: ${{ github.event.inputs.environment || 'production' }}
+    permissions:
+      contents: read
 
     steps:
       - name: Checkout repository
@@ -134,6 +138,8 @@ jobs:
     needs: [ deploy-s3, deploy-gcs ]
     if: always() && (needs.deploy-s3.result == 'success' || needs.deploy-gcs.result == 'success')
     timeout-minutes: 15
+    permissions:
+      contents: read
 
     steps:
       - name: Checkout repository
