@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <!-- Service control -->
+    <group android:id="@+id/group_service">
+        <item
+            android:id="@+id/menu_start_service"
+            android:icon="@android:drawable/ic_media_play"
+            android:title="@string/menu_start_service"
+            app:showAsAction="never" />
+        <item
+            android:id="@+id/menu_stop_service"
+            android:icon="@android:drawable/ic_media_pause"
+            android:title="@string/menu_stop_service"
+            app:showAsAction="never" />
+    </group>
+
+    <item android:id="@+id/divider1" android:orderInCategory="100" />
+
+    <!-- App -->
+    <item
+        android:id="@+id/menu_settings"
+        android:icon="@android:drawable/ic_menu_preferences"
+        android:title="@string/menu_settings"
+        app:showAsAction="never" />
+    <item
+        android:id="@+id/menu_about"
+        android:icon="@android:drawable/ic_menu_info_details"
+        android:title="@string/menu_about"
+        app:showAsAction="never" />
+
+</menu>

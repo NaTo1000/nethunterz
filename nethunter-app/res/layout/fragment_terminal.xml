@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/terminal_background"
+    android:orientation="vertical">
+
+    <ScrollView
+        android:id="@+id/scroll_terminal"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:fillViewport="true">
+
+        <TextView
+            android:id="@+id/tv_terminal_output"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:fontFamily="monospace"
+            android:padding="@dimen/terminal_padding"
+            android:scrollbars="vertical"
+            android:textColor="@color/terminal_text"
+            android:textIsSelectable="true"
+            android:textSize="@dimen/terminal_text_size" />
+    </ScrollView>
+
+    <!-- Input row -->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/kali_dark_surface"
+        android:orientation="horizontal"
+        android:padding="@dimen/padding_small">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:gravity="center_vertical"
+            android:fontFamily="monospace"
+            android:text="$ "
+            android:textColor="@color/kali_red"
+            android:textSize="@dimen/terminal_text_size" />
+
+        <EditText
+            android:id="@+id/et_command_input"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:background="@android:color/transparent"
+            android:fontFamily="monospace"
+            android:hint="@string/terminal_hint"
+            android:imeOptions="actionSend"
+            android:inputType="textNoSuggestions"
+            android:maxLines="1"
+            android:singleLine="true"
+            android:textColor="@color/kali_white"
+            android:textColorHint="@color/kali_grey"
+            android:textSize="@dimen/terminal_text_size" />
+
+        <ImageButton
+            android:id="@+id/btn_send_command"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:background="@android:color/transparent"
+            android:contentDescription="@string/btn_send"
+            android:src="@android:drawable/ic_media_play"
+            android:tint="@color/kali_red" />
+
+    </LinearLayout>
+</LinearLayout>

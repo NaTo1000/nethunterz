@@ -1,0 +1,40 @@
+#!/bin/sh
+# bootkali – mount and launch the Kali Linux chroot
+# Usage: bootkali [command]
+#   If [command] is provided, it is executed inside the chroot.
+#   Otherwise an interactive bash shell is opened.
+
+CHROOT_DIR="${NH_CHROOT_DIR:-/data/local/nhsystem/kali-arm64}"
+BUSYBOX="${BUSYBOX_PATH:-/system/xbin/busybox}"
+
+die() { echo "ERROR: $*" >&2; exit 1; }
+
+# Verify chroot exists
+[ -d "$CHROOT_DIR" ] || die "Chroot not found at $CHROOT_DIR. Please install the Kali chroot."
+
+# Mount filesystems
+mount_chroot() {
+    for mp in proc sys dev dev/pts; do
+        mountpoint -q "$CHROOT_DIR/$mp" 2>/dev/null && continue
+        mount -o bind "/$mp" "$CHROOT_DIR/$mp" || echo "WARN: Could not mount /$mp"
+    done
+    # Mount sdcard for file transfer
+    if [ -d /sdcard ]; then
+        mkdir -p "$CHROOT_DIR/sdcard"
+        mountpoint -q "$CHROOT_DIR/sdcard" 2>/dev/null || mount -o bind /sdcard "$CHROOT_DIR/sdcard"
+    fi
+}
+
+mount_chroot
+
+# Copy /etc/resolv.conf if writable
+if [ -w "$CHROOT_DIR/etc/resolv.conf" ]; then
+    cp /etc/resolv.conf "$CHROOT_DIR/etc/resolv.conf" 2>/dev/null || true
+fi
+
+# Enter chroot
+if [ $# -gt 0 ]; then
+    chroot "$CHROOT_DIR" /bin/bash -c "$*"
+else
+    chroot "$CHROOT_DIR" /bin/bash --rcfile /root/.bashrc -i
+fi

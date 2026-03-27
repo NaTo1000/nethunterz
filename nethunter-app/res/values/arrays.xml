@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Log level entries -->
+    <string-array name="log_level_entries">
+        <item>Verbose</item>
+        <item>Debug</item>
+        <item>Info</item>
+        <item>Warn</item>
+        <item>Error</item>
+    </string-array>
+    <string-array name="log_level_values">
+        <item>VERBOSE</item>
+        <item>DEBUG</item>
+        <item>INFO</item>
+        <item>WARN</item>
+        <item>ERROR</item>
+    </string-array>
+
+    <!-- GPS daemon port options -->
+    <string-array name="gps_port_entries">
+        <item>2947 (gpsd default)</item>
+        <item>8888</item>
+        <item>9999</item>
+    </string-array>
+    <string-array name="gps_port_values">
+        <item>2947</item>
+        <item>8888</item>
+        <item>9999</item>
+    </string-array>
+
+    <!-- Chroot architecture entries -->
+    <string-array name="chroot_arch_entries">
+        <item>Auto-detect</item>
+        <item>ARM64 (kali-arm64)</item>
+        <item>ARMv7 (kali-armhf)</item>
+        <item>x86_64 (kali-amd64)</item>
+        <item>x86 (kali-i386)</item>
+    </string-array>
+    <string-array name="chroot_arch_values">
+        <item>auto</item>
+        <item>arm64</item>
+        <item>armhf</item>
+        <item>amd64</item>
+        <item>i386</item>
+    </string-array>
+
+    <!-- Service restart policy entries -->
+    <string-array name="restart_policy_entries">
+        <item>Never</item>
+        <item>On failure (up to 3 times)</item>
+        <item>Always</item>
+    </string-array>
+    <string-array name="restart_policy_values">
+        <item>never</item>
+        <item>on_failure</item>
+        <item>always</item>
+    </string-array>
+</resources>

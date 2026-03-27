@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Kali Linux dark theme colours -->
+    <color name="kali_black">#FF0D0D0D</color>
+    <color name="kali_dark_surface">#FF1A1A2E</color>
+    <color name="kali_surface">#FF16213E</color>
+    <color name="kali_surface_variant">#FF0F3460</color>
+    <color name="kali_red">#FFE31837</color>
+    <color name="kali_red_dark">#FFB00020</color>
+    <color name="kali_red_light">#FFFF534D</color>
+    <color name="kali_white">#FFFFFFFF</color>
+    <color name="kali_grey_light">#FFB0BEC5</color>
+    <color name="kali_grey">#FF607D8B</color>
+    <color name="kali_grey_dark">#FF37474F</color>
+    <color name="kali_green">#FF4CAF50</color>
+    <color name="kali_green_dark">#FF388E3C</color>
+    <color name="kali_yellow">#FFFFC107</color>
+    <color name="kali_orange">#FFFF5722</color>
+    <color name="kali_blue">#FF1565C0</color>
+    <color name="kali_teal">#FF00BCD4</color>
+
+    <!-- Semantic aliases -->
+    <color name="colorPrimary">@color/kali_red</color>
+    <color name="colorPrimaryDark">@color/kali_red_dark</color>
+    <color name="colorPrimaryVariant">@color/kali_red_dark</color>
+    <color name="colorSecondary">@color/kali_teal</color>
+    <color name="colorSecondaryVariant">@color/kali_blue</color>
+    <color name="colorAccent">@color/kali_red</color>
+    <color name="colorBackground">@color/kali_black</color>
+    <color name="colorSurface">@color/kali_dark_surface</color>
+    <color name="colorError">@color/kali_red</color>
+    <color name="colorOnPrimary">@color/kali_white</color>
+    <color name="colorOnSecondary">@color/kali_black</color>
+    <color name="colorOnBackground">@color/kali_white</color>
+    <color name="colorOnSurface">@color/kali_white</color>
+    <color name="colorOnError">@color/kali_white</color>
+
+    <!-- Status colours -->
+    <color name="status_running">@color/kali_green</color>
+    <color name="status_stopped">@color/kali_grey</color>
+    <color name="status_error">@color/kali_red</color>
+    <color name="status_starting">@color/kali_yellow</color>
+
+    <!-- Terminal colours -->
+    <color name="terminal_background">@color/kali_black</color>
+    <color name="terminal_text">#FF00FF41</color>
+    <color name="terminal_prompt">@color/kali_red</color>
+
+    <!-- Navigation -->
+    <color name="nav_selected">#1AE31837</color>
+</resources>

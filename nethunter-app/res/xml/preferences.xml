@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <PreferenceCategory
+        android:key="pref_category_general"
+        android:title="@string/pref_category_general">
+
+        <SwitchPreferenceCompat
+            android:key="pref_start_on_boot"
+            android:title="@string/pref_start_on_boot"
+            android:summary="@string/pref_start_on_boot_summary"
+            android:defaultValue="false" />
+
+        <ListPreference
+            android:key="pref_log_level"
+            android:title="@string/pref_log_level"
+            android:entries="@array/log_level_entries"
+            android:entryValues="@array/log_level_values"
+            android:defaultValue="INFO" />
+
+    </PreferenceCategory>
+
+    <PreferenceCategory
+        android:key="pref_category_gps"
+        android:title="@string/pref_category_gps">
+
+        <SwitchPreferenceCompat
+            android:key="pref_enable_mock_location"
+            android:title="@string/pref_enable_mock_location"
+            android:summary="@string/pref_enable_mock_location_summary"
+            android:defaultValue="false" />
+
+        <EditTextPreference
+            android:key="pref_gps_daemon_host"
+            android:title="@string/pref_gps_daemon_host"
+            android:defaultValue="127.0.0.1" />
+
+        <EditTextPreference
+            android:key="pref_gps_daemon_port"
+            android:title="@string/pref_gps_daemon_port"
+            android:defaultValue="2947"
+            android:inputType="number" />
+
+    </PreferenceCategory>
+
+    <PreferenceCategory
+        android:key="pref_category_advanced"
+        android:title="@string/pref_category_advanced">
+
+        <EditTextPreference
+            android:key="pref_chroot_path"
+            android:title="@string/pref_chroot_path"
+            android:summary="@string/pref_chroot_path_summary" />
+
+        <ListPreference
+            android:key="pref_chroot_arch"
+            android:title="Chroot architecture"
+            android:entries="@array/chroot_arch_entries"
+            android:entryValues="@array/chroot_arch_values"
+            android:defaultValue="auto" />
+
+    </PreferenceCategory>
+
+</PreferenceScreen>

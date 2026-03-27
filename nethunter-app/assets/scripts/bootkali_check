@@ -1,0 +1,12 @@
+#!/bin/sh
+# bootkali_check – check whether the Kali chroot is currently running
+CHROOT_DIR="${NH_CHROOT_DIR:-/data/local/nhsystem/kali-arm64}"
+PROC_MOUNT="$CHROOT_DIR/proc"
+
+if mountpoint -q "$PROC_MOUNT" 2>/dev/null; then
+    echo "running"
+    exit 0
+else
+    echo "stopped"
+    exit 1
+fi

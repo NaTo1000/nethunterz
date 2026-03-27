@@ -1,0 +1,22 @@
+REM NetHunter DuckHunter Default Script Template
+REM Runs on HID injection; customise for your target.
+REM
+REM Available commands: REM, DELAY, STRING, ENTER, GUI, ALT,
+REM                     CTRL, SHIFT, TAB, CAPSLOCK, BACKSPACE, etc.
+
+DELAY 1000
+
+REM Open a Run dialog on Windows
+GUI r
+DELAY 500
+
+REM Open PowerShell
+STRING powershell
+ENTER
+DELAY 1500
+
+REM Example: print a message
+STRING Write-Host "NetHunter DuckHunter ready."
+ENTER
+
+DELAY 500
