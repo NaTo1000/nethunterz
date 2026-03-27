@@ -1,0 +1,14 @@
+cryptography>=41.0
+pydantic>=2.5
+aiohttp>=3.9
+httpx>=0.26
+tenacity>=8.2
+structlog>=24.1
+prometheus-client>=0.19
+tinydb>=4.8
+anyio>=4.2
+
+[dev]
+pytest>=7.4
+pytest-asyncio>=0.23
+pytest-cov>=4.1
