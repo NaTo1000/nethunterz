@@ -1,0 +1,555 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 56;
+	objects = {
+
+		/* Begin PBXBuildFile section */
+		5EA4066BA6110B2E4A9BF5E4 /* JessicAiMedusaCyberstackApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = E25647846EA49C430B8E4331 /* JessicAiMedusaCyberstackApp.swift */; };
+		8EA5777D9845E8C7CF25084F /* AppState.swift in Sources */ = {isa = PBXBuildFile; fileRef = ADC6174851862C8EB0035BDE /* AppState.swift */; };
+		32C63CDFD1AF4258A966ABAE /* AuthView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 58B06E3B7DDC11B58E13CDBD /* AuthView.swift */; };
+		53EA021A7A4ED8CF01B51ABD /* MainTabView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 880D1D94EB287039D5579FB1 /* MainTabView.swift */; };
+		0F26C07757689ECEA7BA915F /* DashboardView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FB2491E4AB1A9301DB57FE38 /* DashboardView.swift */; };
+		368D0A365802B0ABC12A57D0 /* LoRaTelemetryView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6F2D50AEB9E36208FDBAA30 /* LoRaTelemetryView.swift */; };
+		63A01F7FB15EB63E0F09C17F /* BLEFlipperView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7E59C7DE28D112398EF7933B /* BLEFlipperView.swift */; };
+		7A698BDF5EBDC0531AF1D310 /* GeofenceView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7301567812F867BB6E70E784 /* GeofenceView.swift */; };
+		691AF976BBE2B306674D354F /* AIOrchestrationView.swift in Sources */ = {isa = PBXBuildFile; fileRef = EF8C423B090157AD8527908E /* AIOrchestrationView.swift */; };
+		54F1B4987E023E0D67B3BB55 /* SettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5FE0F01778A82A0CDF274BF0 /* SettingsView.swift */; };
+		0CFFE865DC85E2D24DCDFDA7 /* LoRaNode.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3E1FD21B21708CAAAD49403B /* LoRaNode.swift */; };
+		80C86AA501DB57B213E09886 /* BLEDevice.swift in Sources */ = {isa = PBXBuildFile; fileRef = 13D8703DCC7D73382BA4ED5D /* BLEDevice.swift */; };
+		A2199F9878A2F5E358BABC54 /* GeofenceZone.swift in Sources */ = {isa = PBXBuildFile; fileRef = B719586B3C3114F9F3D01E54 /* GeofenceZone.swift */; };
+		3460BC9EFD18F4D14EFBDE9C /* AIDecision.swift in Sources */ = {isa = PBXBuildFile; fileRef = A022CFA720AD6D28694AA995 /* AIDecision.swift */; };
+		3691E097CC37C6832131F097 /* ESP32Device.swift in Sources */ = {isa = PBXBuildFile; fileRef = 59BC54A4BBEBA65DEC8A174D /* ESP32Device.swift */; };
+		3746C18E7562788EF97D22B4 /* LoRaManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = E45E572A8ED693461DEFD7AD /* LoRaManager.swift */; };
+		D5049D3D56475B07E048916C /* BLEManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3434F5A63E4B9EE0732E15D9 /* BLEManager.swift */; };
+		85F287127D734A7FE752EBC5 /* GeofenceManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = ED13C7EE9F43C8766E62ED5C /* GeofenceManager.swift */; };
+		E33C86679A73269D4329E502 /* AIOrchestrator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8C83648948914AC1700B2286 /* AIOrchestrator.swift */; };
+		70C1B7B43440BB5D9E435085 /* QuantumCryptoService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 65984D9D38925E307F9513A8 /* QuantumCryptoService.swift */; };
+		E845089655441FAD28781BD7 /* ESP32FirmwareService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8DB5CA0E2029DAB97C167993 /* ESP32FirmwareService.swift */; };
+		C79F576F19869CFD6B57843D /* Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = B706E258FC3352EB1EB7194E /* Info.plist */; };
+		5BE625B4EF7D4754E5DCFA8B /* JessicAiMedusaCyberstackTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E3547AA1F89D1E71BCC734B5 /* JessicAiMedusaCyberstackTests.swift */; };
+		96FD3C8489F957481B7FF8C6 /* CoreModelsTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 16E1BFAEED5C0F8423909941 /* CoreModelsTests.swift */; };
+		21A33E190190E898D3652946 /* JessicAiMedusaCyberstackUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8D6C63862B3D943A9463DD5 /* JessicAiMedusaCyberstackUITests.swift */; };
+		/* End PBXBuildFile section */
+
+		/* Begin PBXFileReference section */
+		7BCCADA3021C07D12E775CB5 /* JessicAiMedusaCyberstack.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = JessicAiMedusaCyberstack.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		195F9293022CEE80C9E8D0C0 /* JessicAiMedusaCyberstackTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = JessicAiMedusaCyberstackTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		6D4C2814DD103DD5D4992DCE /* JessicAiMedusaCyberstackUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = JessicAiMedusaCyberstackUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		E25647846EA49C430B8E4331 /* JessicAiMedusaCyberstackApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = JessicAiMedusaCyberstackApp.swift; sourceTree = "<group>"; };
+		ADC6174851862C8EB0035BDE /* AppState.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppState.swift; sourceTree = "<group>"; };
+		58B06E3B7DDC11B58E13CDBD /* AuthView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AuthView.swift; sourceTree = "<group>"; };
+		880D1D94EB287039D5579FB1 /* MainTabView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainTabView.swift; sourceTree = "<group>"; };
+		FB2491E4AB1A9301DB57FE38 /* DashboardView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DashboardView.swift; sourceTree = "<group>"; };
+		D6F2D50AEB9E36208FDBAA30 /* LoRaTelemetryView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoRaTelemetryView.swift; sourceTree = "<group>"; };
+		7E59C7DE28D112398EF7933B /* BLEFlipperView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BLEFlipperView.swift; sourceTree = "<group>"; };
+		7301567812F867BB6E70E784 /* GeofenceView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GeofenceView.swift; sourceTree = "<group>"; };
+		EF8C423B090157AD8527908E /* AIOrchestrationView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AIOrchestrationView.swift; sourceTree = "<group>"; };
+		5FE0F01778A82A0CDF274BF0 /* SettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsView.swift; sourceTree = "<group>"; };
+		3E1FD21B21708CAAAD49403B /* LoRaNode.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoRaNode.swift; sourceTree = "<group>"; };
+		13D8703DCC7D73382BA4ED5D /* BLEDevice.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BLEDevice.swift; sourceTree = "<group>"; };
+		B719586B3C3114F9F3D01E54 /* GeofenceZone.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GeofenceZone.swift; sourceTree = "<group>"; };
+		A022CFA720AD6D28694AA995 /* AIDecision.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AIDecision.swift; sourceTree = "<group>"; };
+		59BC54A4BBEBA65DEC8A174D /* ESP32Device.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ESP32Device.swift; sourceTree = "<group>"; };
+		E45E572A8ED693461DEFD7AD /* LoRaManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoRaManager.swift; sourceTree = "<group>"; };
+		3434F5A63E4B9EE0732E15D9 /* BLEManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BLEManager.swift; sourceTree = "<group>"; };
+		ED13C7EE9F43C8766E62ED5C /* GeofenceManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GeofenceManager.swift; sourceTree = "<group>"; };
+		8C83648948914AC1700B2286 /* AIOrchestrator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AIOrchestrator.swift; sourceTree = "<group>"; };
+		65984D9D38925E307F9513A8 /* QuantumCryptoService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = QuantumCryptoService.swift; sourceTree = "<group>"; };
+		8DB5CA0E2029DAB97C167993 /* ESP32FirmwareService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ESP32FirmwareService.swift; sourceTree = "<group>"; };
+		B706E258FC3352EB1EB7194E /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		E3547AA1F89D1E71BCC734B5 /* JessicAiMedusaCyberstackTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = JessicAiMedusaCyberstackTests.swift; sourceTree = "<group>"; };
+		16E1BFAEED5C0F8423909941 /* CoreModelsTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CoreModelsTests.swift; sourceTree = "<group>"; };
+		E8D6C63862B3D943A9463DD5 /* JessicAiMedusaCyberstackUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = JessicAiMedusaCyberstackUITests.swift; sourceTree = "<group>"; };
+		/* End PBXFileReference section */
+
+		/* Begin PBXGroup section */
+		5928955287B8089ED2177128 = {
+			isa = PBXGroup;
+			children = (
+				095FEE2E633C50D24407F2D6 /* JessicAiMedusaCyberstack */,
+				516831D832DDC7318520265A /* JessicAiMedusaCyberstackTests */,
+				32B7A3E592646169E81CA3AD /* JessicAiMedusaCyberstackUITests */,
+				BF7A2D27A78D590BDEF15AF2 /* Products */,
+			);
+			sourceTree = "<group>";
+		};
+		BF7A2D27A78D590BDEF15AF2 /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				7BCCADA3021C07D12E775CB5 /* JessicAiMedusaCyberstack.app */,
+				195F9293022CEE80C9E8D0C0 /* JessicAiMedusaCyberstackTests.xctest */,
+				6D4C2814DD103DD5D4992DCE /* JessicAiMedusaCyberstackUITests.xctest */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		095FEE2E633C50D24407F2D6 /* JessicAiMedusaCyberstack */ = {
+			isa = PBXGroup;
+			children = (
+				E25647846EA49C430B8E4331 /* JessicAiMedusaCyberstackApp.swift */,
+				ADC6174851862C8EB0035BDE /* AppState.swift */,
+				78EF4B0EA3FDA2A792BCF074 /* Views */,
+				CA608C0B22E7B6F9B389BDDD /* Models */,
+				95DF61116CBC7317336DBE03 /* Services */,
+				0ECEC165EE4DFB177DC80E73 /* Resources */,
+			);
+			path = JessicAiMedusaCyberstack;
+			sourceTree = "<group>";
+		};
+		78EF4B0EA3FDA2A792BCF074 /* Views */ = {
+			isa = PBXGroup;
+			children = (
+				58B06E3B7DDC11B58E13CDBD /* AuthView.swift */,
+				880D1D94EB287039D5579FB1 /* MainTabView.swift */,
+				FB2491E4AB1A9301DB57FE38 /* DashboardView.swift */,
+				D6F2D50AEB9E36208FDBAA30 /* LoRaTelemetryView.swift */,
+				7E59C7DE28D112398EF7933B /* BLEFlipperView.swift */,
+				7301567812F867BB6E70E784 /* GeofenceView.swift */,
+				EF8C423B090157AD8527908E /* AIOrchestrationView.swift */,
+				5FE0F01778A82A0CDF274BF0 /* SettingsView.swift */,
+			);
+			path = Views;
+			sourceTree = "<group>";
+		};
+		CA608C0B22E7B6F9B389BDDD /* Models */ = {
+			isa = PBXGroup;
+			children = (
+				3E1FD21B21708CAAAD49403B /* LoRaNode.swift */,
+				13D8703DCC7D73382BA4ED5D /* BLEDevice.swift */,
+				B719586B3C3114F9F3D01E54 /* GeofenceZone.swift */,
+				A022CFA720AD6D28694AA995 /* AIDecision.swift */,
+				59BC54A4BBEBA65DEC8A174D /* ESP32Device.swift */,
+			);
+			path = Models;
+			sourceTree = "<group>";
+		};
+		95DF61116CBC7317336DBE03 /* Services */ = {
+			isa = PBXGroup;
+			children = (
+				E45E572A8ED693461DEFD7AD /* LoRaManager.swift */,
+				3434F5A63E4B9EE0732E15D9 /* BLEManager.swift */,
+				ED13C7EE9F43C8766E62ED5C /* GeofenceManager.swift */,
+				8C83648948914AC1700B2286 /* AIOrchestrator.swift */,
+				65984D9D38925E307F9513A8 /* QuantumCryptoService.swift */,
+				8DB5CA0E2029DAB97C167993 /* ESP32FirmwareService.swift */,
+			);
+			path = Services;
+			sourceTree = "<group>";
+		};
+		0ECEC165EE4DFB177DC80E73 /* Resources */ = {
+			isa = PBXGroup;
+			children = (
+				B706E258FC3352EB1EB7194E /* Info.plist */,
+			);
+			path = Resources;
+			sourceTree = "<group>";
+		};
+		516831D832DDC7318520265A /* JessicAiMedusaCyberstackTests */ = {
+			isa = PBXGroup;
+			children = (
+				E3547AA1F89D1E71BCC734B5 /* JessicAiMedusaCyberstackTests.swift */,
+				16E1BFAEED5C0F8423909941 /* CoreModelsTests.swift */,
+			);
+			path = ../JessicAiMedusaCyberstackTests;
+			sourceTree = "<group>";
+		};
+		32B7A3E592646169E81CA3AD /* JessicAiMedusaCyberstackUITests */ = {
+			isa = PBXGroup;
+			children = (
+				E8D6C63862B3D943A9463DD5 /* JessicAiMedusaCyberstackUITests.swift */,
+			);
+			path = ../JessicAiMedusaCyberstackUITests;
+			sourceTree = "<group>";
+		};
+		/* End PBXGroup section */
+
+		/* Begin PBXNativeTarget section */
+		6439CF22188FA14BBD363342 /* JessicAiMedusaCyberstack */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 7BF94F9FBFED684C64C3AE5F /* Build configuration list for PBXNativeTarget "JessicAiMedusaCyberstack" */;
+			buildPhases = (
+				869AA75568406BC6181D282D /* Sources */,
+				77417434AB4C68AD87C05857 /* Resources */,
+				56BAF137DAAFD967197255D3 /* Frameworks */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = JessicAiMedusaCyberstack;
+			productName = JessicAiMedusaCyberstack;
+			productReference = 7BCCADA3021C07D12E775CB5 /* JessicAiMedusaCyberstack.app */;
+			productType = "com.apple.product-type.application";
+		};
+		BA128F9D3C0D15FFB32AEEA8 /* JessicAiMedusaCyberstackTests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 53D9908EEBB79268F5109C98 /* Build configuration list for PBXNativeTarget "JessicAiMedusaCyberstackTests" */;
+			buildPhases = (
+				6E010B3D85AA514D3FB28B7F /* Sources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = JessicAiMedusaCyberstackTests;
+			productName = JessicAiMedusaCyberstackTests;
+			productReference = 195F9293022CEE80C9E8D0C0 /* JessicAiMedusaCyberstackTests.xctest */;
+			productType = "com.apple.product-type.bundle.unit-test";
+		};
+		840D47E4DA74F388E13089FF /* JessicAiMedusaCyberstackUITests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 95C7B04EA6806B441AF17CA5 /* Build configuration list for PBXNativeTarget "JessicAiMedusaCyberstackUITests" */;
+			buildPhases = (
+				BA3A70D54D131C3362FE3341 /* Sources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = JessicAiMedusaCyberstackUITests;
+			productName = JessicAiMedusaCyberstackUITests;
+			productReference = 6D4C2814DD103DD5D4992DCE /* JessicAiMedusaCyberstackUITests.xctest */;
+			productType = "com.apple.product-type.bundle.ui-testing";
+		};
+		/* End PBXNativeTarget section */
+
+		/* Begin PBXProject section */
+		46F86FAA6BBF9AC94A7E4595 /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				BuildIndependentTargetsInParallel = 1;
+				LastSwiftUpdateCheck = 1540;
+				LastUpgradeCheck = 1540;
+				TargetAttributes = {
+					6439CF22188FA14BBD363342 = {
+						CreatedOnToolsVersion = 15.4;
+					};
+					BA128F9D3C0D15FFB32AEEA8 = {
+						CreatedOnToolsVersion = 15.4;
+						TestTargetID = 6439CF22188FA14BBD363342;
+					};
+					840D47E4DA74F388E13089FF = {
+						CreatedOnToolsVersion = 15.4;
+						TestTargetID = 6439CF22188FA14BBD363342;
+					};
+				};
+			};
+			buildConfigurationList = 828B4F54025B4042F4F7C3F6 /* Build configuration list for PBXProject "JessicAiMedusaCyberstack" */;
+			compatibilityVersion = "Xcode 14.0";
+			developmentRegion = en;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				en,
+				Base,
+			);
+			mainGroup = 5928955287B8089ED2177128;
+			productRefGroup = BF7A2D27A78D590BDEF15AF2 /* Products */;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				6439CF22188FA14BBD363342 /* JessicAiMedusaCyberstack */,
+				BA128F9D3C0D15FFB32AEEA8 /* JessicAiMedusaCyberstackTests */,
+				840D47E4DA74F388E13089FF /* JessicAiMedusaCyberstackUITests */,
+			);
+		};
+		/* End PBXProject section */
+
+		/* Begin PBXResourcesBuildPhase section */
+		77417434AB4C68AD87C05857 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				C79F576F19869CFD6B57843D /* Info.plist in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		/* End PBXResourcesBuildPhase section */
+
+		/* Begin PBXFrameworksBuildPhase section */
+		56BAF137DAAFD967197255D3 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		/* End PBXFrameworksBuildPhase section */
+
+		/* Begin PBXSourcesBuildPhase section */
+		869AA75568406BC6181D282D /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				5EA4066BA6110B2E4A9BF5E4 /* JessicAiMedusaCyberstackApp.swift in Sources */,
+				8EA5777D9845E8C7CF25084F /* AppState.swift in Sources */,
+				32C63CDFD1AF4258A966ABAE /* AuthView.swift in Sources */,
+				53EA021A7A4ED8CF01B51ABD /* MainTabView.swift in Sources */,
+				0F26C07757689ECEA7BA915F /* DashboardView.swift in Sources */,
+				368D0A365802B0ABC12A57D0 /* LoRaTelemetryView.swift in Sources */,
+				63A01F7FB15EB63E0F09C17F /* BLEFlipperView.swift in Sources */,
+				7A698BDF5EBDC0531AF1D310 /* GeofenceView.swift in Sources */,
+				691AF976BBE2B306674D354F /* AIOrchestrationView.swift in Sources */,
+				54F1B4987E023E0D67B3BB55 /* SettingsView.swift in Sources */,
+				0CFFE865DC85E2D24DCDFDA7 /* LoRaNode.swift in Sources */,
+				80C86AA501DB57B213E09886 /* BLEDevice.swift in Sources */,
+				A2199F9878A2F5E358BABC54 /* GeofenceZone.swift in Sources */,
+				3460BC9EFD18F4D14EFBDE9C /* AIDecision.swift in Sources */,
+				3691E097CC37C6832131F097 /* ESP32Device.swift in Sources */,
+				3746C18E7562788EF97D22B4 /* LoRaManager.swift in Sources */,
+				D5049D3D56475B07E048916C /* BLEManager.swift in Sources */,
+				85F287127D734A7FE752EBC5 /* GeofenceManager.swift in Sources */,
+				E33C86679A73269D4329E502 /* AIOrchestrator.swift in Sources */,
+				70C1B7B43440BB5D9E435085 /* QuantumCryptoService.swift in Sources */,
+				E845089655441FAD28781BD7 /* ESP32FirmwareService.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		6E010B3D85AA514D3FB28B7F /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				5BE625B4EF7D4754E5DCFA8B /* JessicAiMedusaCyberstackTests.swift in Sources */,
+				96FD3C8489F957481B7FF8C6 /* CoreModelsTests.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		BA3A70D54D131C3362FE3341 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				21A33E190190E898D3652946 /* JessicAiMedusaCyberstackUITests.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		/* End PBXSourcesBuildPhase section */
+
+		/* Begin XCBuildConfiguration section */
+		8EE6B6ADC095CDC56BE16A9E /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				IPHONEOS_DEPLOYMENT_TARGET = 16.0;
+				SDKROOT = iphoneos;
+			};
+			name = Debug;
+		};
+		C25F4F6540DF31069317F7C3 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				IPHONEOS_DEPLOYMENT_TARGET = 16.0;
+				SDKROOT = iphoneos;
+			};
+			name = Release;
+		};
+		C6CDA4B6FD66A7F05D1ACD64 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				ASSET_CATALOG_COMPILER_OPTIMIZATION = space;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++20";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CODE_SIGN_IDENTITY = "";
+				CODE_SIGN_STYLE = Automatic;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_TESTABILITY = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu17;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 16.0;
+				INFOPLIST_FILE = JessicAiMedusaCyberstack/Resources/Info.plist;
+				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
+				MTL_FAST_MATH = YES;
+				ONLY_ACTIVE_ARCH = YES;
+				PRODUCT_BUNDLE_IDENTIFIER = com.nethunterz.jessicai.medusa;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = iphoneos;
+				SUPPORTED_PLATFORMS = "iphonesimulator iphoneos";
+				SUPPORTS_MACCATALYST = NO;
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = DEBUG;
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = 1;
+			};
+			name = Debug;
+		};
+		C3D81280F6567D74515A67A7 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++20";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CODE_SIGN_IDENTITY = "";
+				CODE_SIGN_STYLE = Automatic;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				ENABLE_NS_ASSERTIONS = NO;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu17;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 16.0;
+				INFOPLIST_FILE = JessicAiMedusaCyberstack/Resources/Info.plist;
+				MTL_FAST_MATH = YES;
+				PRODUCT_BUNDLE_IDENTIFIER = com.nethunterz.jessicai.medusa;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = iphoneos;
+				SUPPORTED_PLATFORMS = "iphonesimulator iphoneos";
+				SUPPORTS_MACCATALYST = NO;
+				SWIFT_COMPILATION_MODE = wholemodule;
+				SWIFT_OPTIMIZATION_LEVEL = "-O";
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = 1;
+				VALIDATE_PRODUCT = YES;
+			};
+			name = Release;
+		};
+		621385DDFDB50DB5DC3C7AFD /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				IPHONEOS_DEPLOYMENT_TARGET = 16.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.nethunterz.jessicai.medusa.tests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = iphoneos;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = 1;
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/JessicAiMedusaCyberstack.app/$(BUNDLE_EXECUTABLE_FOLDER_PATH)/JessicAiMedusaCyberstack";
+			};
+			name = Debug;
+		};
+		0472651C93A265996FEFE4D2 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				IPHONEOS_DEPLOYMENT_TARGET = 16.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.nethunterz.jessicai.medusa.tests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = iphoneos;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = 1;
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/JessicAiMedusaCyberstack.app/$(BUNDLE_EXECUTABLE_FOLDER_PATH)/JessicAiMedusaCyberstack";
+			};
+			name = Release;
+		};
+		B34CBAC9CC4DBEB53392B4DA /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				IPHONEOS_DEPLOYMENT_TARGET = 16.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.nethunterz.jessicai.medusa.uitests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = iphoneos;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = 1;
+				TEST_TARGET_NAME = JessicAiMedusaCyberstack;
+			};
+			name = Debug;
+		};
+		57A305DFF25FF5E5B2F93662 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				IPHONEOS_DEPLOYMENT_TARGET = 16.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.nethunterz.jessicai.medusa.uitests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = iphoneos;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = 1;
+				TEST_TARGET_NAME = JessicAiMedusaCyberstack;
+			};
+			name = Release;
+		};
+		/* End XCBuildConfiguration section */
+
+		/* Begin XCConfigurationList section */
+		828B4F54025B4042F4F7C3F6 /* Build configuration list for PBXProject "JessicAiMedusaCyberstack" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				8EE6B6ADC095CDC56BE16A9E /* Debug */,
+				C25F4F6540DF31069317F7C3 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		7BF94F9FBFED684C64C3AE5F /* Build configuration list for PBXNativeTarget "JessicAiMedusaCyberstack" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				C6CDA4B6FD66A7F05D1ACD64 /* Debug */,
+				C3D81280F6567D74515A67A7 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		53D9908EEBB79268F5109C98 /* Build configuration list for PBXNativeTarget "JessicAiMedusaCyberstackTests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				621385DDFDB50DB5DC3C7AFD /* Debug */,
+				0472651C93A265996FEFE4D2 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		95C7B04EA6806B441AF17CA5 /* Build configuration list for PBXNativeTarget "JessicAiMedusaCyberstackUITests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				B34CBAC9CC4DBEB53392B4DA /* Debug */,
+				57A305DFF25FF5E5B2F93662 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		/* End XCConfigurationList section */
+
+	};
+	rootObject = 46F86FAA6BBF9AC94A7E4595 /* Project object */;
+}

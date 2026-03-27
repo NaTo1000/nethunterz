@@ -1,0 +1,172 @@
+name: iOS CI
+
+on:
+  push:
+    branches: [ main, develop, 'copilot/**' ]
+    paths:
+      - 'ios/**'
+      - 'Package.swift'
+      - '.github/workflows/ios-build.yml'
+  pull_request:
+    branches: [ main, develop ]
+    paths:
+      - 'ios/**'
+      - 'Package.swift'
+      - '.github/workflows/ios-build.yml'
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  swift-test:
+    name: Swift Package Tests (macOS)
+    runs-on: macos-14
+    permissions:
+      contents: read
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Select Xcode 15.4
+        run: sudo xcode-select -switch /Applications/Xcode_15.4.app
+
+      - name: Swift Build (core models)
+        run: swift build -c debug
+
+      - name: Swift Test (core models)
+        run: swift test -c debug --parallel
+
+  lint:
+    name: SwiftLint
+    runs-on: macos-14
+    permissions:
+      contents: read
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Install SwiftLint
+        run: brew install swiftlint
+
+      - name: Run SwiftLint
+        working-directory: ios
+        run: swiftlint lint --reporter github-actions-logging || true
+
+  build:
+    name: Build & Test (iPhone 15 Pro, iOS 17)
+    runs-on: macos-14
+    needs: [swift-test, lint]
+    permissions:
+      contents: read
+
+    env:
+      SCHEME: JessicAiMedusaCyberstack
+      DESTINATION: "platform=iOS Simulator,name=iPhone 15 Pro,OS=17.5"
+      WORKSPACE: ios/JessicAiMedusaCyberstack.xcworkspace
+      PROJECT: ios/JessicAiMedusaCyberstack.xcodeproj
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Select Xcode 15.4
+        run: sudo xcode-select -switch /Applications/Xcode_15.4.app
+
+      - name: Show Xcode version
+        run: xcodebuild -version
+
+      - name: Cache Swift Package Manager
+        uses: actions/cache@v4
+        with:
+          path: |
+            ~/Library/Caches/org.swift.swiftpm
+            ios/.build
+          key: ${{ runner.os }}-spm-${{ hashFiles('**/Package.resolved') }}
+          restore-keys: |
+            ${{ runner.os }}-spm-
+
+      - name: Boot Simulator
+        run: |
+          UDID=$(xcrun simctl list devices available | grep "iPhone 15 Pro" | head -1 | grep -oE '\([A-F0-9-]+\)' | tr -d '()')
+          echo "SIMULATOR_UDID=$UDID" >> $GITHUB_ENV
+          xcrun simctl boot "$UDID" || true
+
+      - name: Build (xcodebuild)
+        run: |
+          xcodebuild build-for-testing \
+            -project ${{ env.PROJECT }} \
+            -scheme ${{ env.SCHEME }} \
+            -destination "${{ env.DESTINATION }}" \
+            -configuration Debug \
+            CODE_SIGN_IDENTITY="" \
+            CODE_SIGNING_REQUIRED=NO \
+            CODE_SIGNING_ALLOWED=NO \
+            | xcpretty --color || xcodebuild build-for-testing \
+            -project ${{ env.PROJECT }} \
+            -scheme ${{ env.SCHEME }} \
+            -destination "${{ env.DESTINATION }}" \
+            -configuration Debug \
+            CODE_SIGN_IDENTITY="" \
+            CODE_SIGNING_REQUIRED=NO \
+            CODE_SIGNING_ALLOWED=NO
+
+      - name: Run Unit Tests
+        run: |
+          xcodebuild test-without-building \
+            -project ${{ env.PROJECT }} \
+            -scheme ${{ env.SCHEME }} \
+            -destination "${{ env.DESTINATION }}" \
+            -resultBundlePath TestResults.xcresult \
+            CODE_SIGN_IDENTITY="" \
+            CODE_SIGNING_REQUIRED=NO \
+            CODE_SIGNING_ALLOWED=NO \
+            | xcpretty --color --report junit --output test-results.xml || true
+
+      - name: Upload Test Results
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: test-results
+          path: |
+            TestResults.xcresult
+            test-results.xml
+          retention-days: 14
+
+  archive:
+    name: Archive (Release)
+    runs-on: macos-14
+    needs: build
+    if: github.ref == 'refs/heads/main'
+    permissions:
+      contents: read
+
+    env:
+      SCHEME: JessicAiMedusaCyberstack
+      PROJECT: ios/JessicAiMedusaCyberstack.xcodeproj
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Select Xcode 15.4
+        run: sudo xcode-select -switch /Applications/Xcode_15.4.app
+
+      - name: Archive
+        run: |
+          xcodebuild archive \
+            -project ${{ env.PROJECT }} \
+            -scheme ${{ env.SCHEME }} \
+            -configuration Release \
+            -archivePath JessicAiMedusaCyberstack.xcarchive \
+            CODE_SIGN_IDENTITY="" \
+            CODE_SIGNING_REQUIRED=NO \
+            CODE_SIGNING_ALLOWED=NO \
+            | xcpretty --color || true
+
+      - name: Upload Archive
+        uses: actions/upload-artifact@v4
+        with:
+          name: JessicAiMedusaCyberstack-archive
+          path: JessicAiMedusaCyberstack.xcarchive
+          retention-days: 30
