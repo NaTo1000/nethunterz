@@ -9,6 +9,7 @@ import hashlib
 import json
 import logging
 import os
+import random
 import shutil
 import subprocess
 import sys
@@ -136,7 +137,6 @@ class FirmwareBuilder:
         with open(sim_firmware, 'wb') as f:
             f.write(header)
             # Write 64KB of pseudo-random data as placeholder
-            import random
             rng = random.Random(hash(version))
             f.write(bytes(rng.getrandbits(8) for _ in range(64 * 1024)))
 

@@ -17,7 +17,14 @@ from typing import Optional
 from flask import Flask, jsonify, render_template, request, abort, send_from_directory
 
 app = Flask(__name__)
-app.config['SECRET_KEY'] = os.environ.get('FLASK_SECRET_KEY', 'dev-secret-change-in-prod')
+_secret_key = os.environ.get('FLASK_SECRET_KEY')
+if not _secret_key:
+    import sys
+    if os.environ.get('FLASK_ENV') == 'production':
+        print("ERROR: FLASK_SECRET_KEY must be set in production", file=sys.stderr)
+        sys.exit(1)
+    _secret_key = 'dev-secret-change-in-prod'
+app.config['SECRET_KEY'] = _secret_key
 app.config['MAX_CONTENT_LENGTH'] = 10 * 1024 * 1024  # 10 MB max upload
 
 logging.basicConfig(level=logging.INFO)
