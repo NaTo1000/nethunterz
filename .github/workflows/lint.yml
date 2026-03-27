@@ -1,0 +1,25 @@
+name: Lint
+on:
+  push:
+    branches: ["main", "copilot/**", "feature/**"]
+  pull_request:
+    branches: ["main"]
+permissions:
+  contents: read
+jobs:
+  lint:
+    name: Lint Python
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+          cache: pip
+      - name: Install linters
+        run: pip install flake8 flake8-bugbear
+      - name: Flake8
+        run: |
+          flake8 nrf_module/ cloud/ flipper/ lora_mesh/ tests/ \
+            --max-line-length=100 \
+            --extend-ignore=E203,W503
