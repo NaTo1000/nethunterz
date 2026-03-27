@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <!-- Base application theme -->
+    <style name="Theme.NetHunterZ" parent="Theme.MaterialComponents.DayNight.DarkActionBar">
+        <!-- Primary brand color -->
+        <item name="colorPrimary">@color/colorPrimary</item>
+        <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
+        <item name="colorPrimaryVariant">@color/colorPrimaryVariant</item>
+
+        <!-- Secondary brand color -->
+        <item name="colorSecondary">@color/colorSecondary</item>
+        <item name="colorSecondaryVariant">@color/colorSecondaryVariant</item>
+
+        <!-- Status bar color -->
+        <item name="android:statusBarColor">@color/colorStatusBar</item>
+
+        <!-- Background / surface -->
+        <item name="android:colorBackground">@color/colorBackground</item>
+        <item name="colorSurface">@color/colorSurface</item>
+        <item name="colorError">@color/colorError</item>
+
+        <!-- On-colors -->
+        <item name="colorOnPrimary">@color/colorOnPrimary</item>
+        <item name="colorOnSecondary">@color/colorOnSecondary</item>
+        <item name="colorOnBackground">@color/colorOnBackground</item>
+        <item name="colorOnSurface">@color/colorOnSurface</item>
+        <item name="colorOnError">@color/colorOnError</item>
+
+        <!-- Text appearance -->
+        <item name="android:textColorPrimary">@color/textPrimary</item>
+        <item name="android:textColorSecondary">@color/textSecondary</item>
+    </style>
+
+    <!-- Theme variant with no action bar (for splash / fullscreen) -->
+    <style name="Theme.NetHunterZ.NoActionBar" parent="Theme.NetHunterZ">
+        <item name="windowActionBar">false</item>
+        <item name="windowNoTitle">true</item>
+    </style>
+
+    <!-- Toolbar style -->
+    <style name="Widget.NetHunterZ.Toolbar" parent="Widget.MaterialComponents.Toolbar">
+        <item name="android:background">@color/colorToolbar</item>
+        <item name="titleTextColor">@color/textPrimary</item>
+        <item name="subtitleTextColor">@color/textSecondary</item>
+    </style>
+
+    <!-- App bar overlay theme -->
+    <style name="Theme.NetHunterZ.AppBarOverlay"
+        parent="ThemeOverlay.AppCompat.Dark.ActionBar" />
+
+    <!-- Popup overlay theme -->
+    <style name="Theme.NetHunterZ.PopupOverlay"
+        parent="ThemeOverlay.AppCompat.Light" />
+
+</resources>

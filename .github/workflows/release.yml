@@ -1,0 +1,81 @@
+name: Release
+
+on:
+  push:
+    tags:
+      - 'v*'
+
+jobs:
+  release:
+    name: Build and Publish Release APK
+    runs-on: ubuntu-latest
+
+    permissions:
+      contents: write  # Required to create a GitHub Release
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
+        with:
+          fetch-depth: 0  # Full history for changelog generation
+
+      - name: Set up JDK 11
+        uses: actions/setup-java@v3
+        with:
+          java-version: '11'
+          distribution: 'temurin'
+          cache: gradle
+
+      - name: Grant execute permission for gradlew
+        run: chmod +x gradlew
+
+      - name: Cache Gradle packages
+        uses: actions/cache@v3
+        with:
+          path: |
+            ~/.gradle/caches
+            ~/.gradle/wrapper
+          key: ${{ runner.os }}-gradle-${{ hashFiles('**/*.gradle*', '**/gradle-wrapper.properties') }}
+          restore-keys: |
+            ${{ runner.os }}-gradle-
+
+      - name: Extract version from tag
+        id: version
+        run: echo "VERSION=${GITHUB_REF_NAME#v}" >> $GITHUB_OUTPUT
+
+      - name: Build release APK
+        run: ./gradlew assembleRelease --no-daemon
+
+      - name: Rename APK with version
+        run: |
+          APK_SRC="nethunter-app/build/outputs/apk/release/nethunter-app-release-unsigned.apk"
+          APK_DST="nethunter-app/build/outputs/apk/release/nethunterz-${{ steps.version.outputs.VERSION }}.apk"
+          if [ -f "$APK_SRC" ]; then
+            mv "$APK_SRC" "$APK_DST"
+          fi
+
+      - name: Create GitHub Release
+        uses: softprops/action-gh-release@v1
+        with:
+          name: "NetHunterZ ${{ github.ref_name }}"
+          tag_name: ${{ github.ref_name }}
+          draft: false
+          prerelease: ${{ contains(github.ref_name, '-beta') || contains(github.ref_name, '-alpha') || contains(github.ref_name, '-rc') }}
+          body: |
+            ## NetHunterZ ${{ github.ref_name }}
+
+            ### What's New
+            See [CHANGELOG](https://github.com/${{ github.repository }}/blob/main/CHANGELOG.md) for details.
+
+            ### Installation
+            1. Download the APK below.
+            2. Enable "Install from unknown sources" on your NetHunter device.
+            3. Install the APK with `adb install nethunterz-${{ steps.version.outputs.VERSION }}.apk`
+
+            ### Requirements
+            - Android 5.0+ (API 21)
+            - Rooted device with NetHunter kernel
+          files: |
+            nethunter-app/build/outputs/apk/release/nethunterz-${{ steps.version.outputs.VERSION }}.apk
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

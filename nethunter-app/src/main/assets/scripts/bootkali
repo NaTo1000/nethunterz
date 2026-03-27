@@ -1,0 +1,126 @@
+#!/system/bin/sh
+# bootkali - Bootstrap the Kali Linux chroot environment
+#
+# This script mounts the necessary virtual filesystems into the chroot,
+# sets up the environment, and drops into the Kali shell.
+#
+# Usage: bootkali [command]
+#   If [command] is supplied, it is executed inside the chroot.
+#   Otherwise, an interactive bash session is opened.
+#
+# Requirements:
+#   - Root access (su)
+#   - Kali rootfs installed at $CHROOT
+#
+# Author: NetHunterZ
+
+CHROOT="/data/local/nhsystem/kali-arm64"
+MNT="$CHROOT/proc $CHROOT/sys $CHROOT/dev $CHROOT/dev/pts"
+
+###############################################################################
+# Logging helpers
+###############################################################################
+log_info()  { echo "[*] $*"; }
+log_warn()  { echo "[!] $*"; }
+log_error() { echo "[-] $*" >&2; }
+log_ok()    { echo "[+] $*"; }
+
+###############################################################################
+# Sanity checks
+###############################################################################
+if [ ! -d "$CHROOT" ]; then
+    log_error "Kali chroot not found at $CHROOT"
+    log_error "Please install the NetHunter rootfs first."
+    exit 1
+fi
+
+if [ "$(id -u)" -ne 0 ]; then
+    log_error "bootkali must be run as root."
+    exit 1
+fi
+
+###############################################################################
+# Mount virtual filesystems
+###############################################################################
+mount_chroot() {
+    log_info "Mounting chroot filesystems..."
+
+    # /proc
+    if ! mountpoint -q "$CHROOT/proc"; then
+        mount -t proc proc "$CHROOT/proc" || log_warn "Failed to mount /proc"
+    fi
+
+    # /sys
+    if ! mountpoint -q "$CHROOT/sys"; then
+        mount -t sysfs sysfs "$CHROOT/sys" || log_warn "Failed to mount /sys"
+    fi
+
+    # /dev
+    if ! mountpoint -q "$CHROOT/dev"; then
+        mount -o bind /dev "$CHROOT/dev" || log_warn "Failed to bind-mount /dev"
+    fi
+
+    # /dev/pts
+    if ! mountpoint -q "$CHROOT/dev/pts"; then
+        mount -o bind /dev/pts "$CHROOT/dev/pts" || log_warn "Failed to bind-mount /dev/pts"
+    fi
+
+    # /sdcard → /mnt/sdcard inside chroot
+    if [ -d /sdcard ] && [ -d "$CHROOT/mnt/sdcard" ]; then
+        mountpoint -q "$CHROOT/mnt/sdcard" || \
+            mount -o bind /sdcard "$CHROOT/mnt/sdcard"
+    fi
+
+    log_ok "Filesystems mounted."
+}
+
+###############################################################################
+# Environment setup
+###############################################################################
+setup_env() {
+    log_info "Setting up chroot environment..."
+
+    # Ensure /etc/resolv.conf exists with a usable DNS server
+    RESOLV="$CHROOT/etc/resolv.conf"
+    if [ ! -s "$RESOLV" ]; then
+        echo "nameserver 8.8.8.8" > "$RESOLV"
+        echo "nameserver 8.8.4.4" >> "$RESOLV"
+    fi
+
+    # Copy Android hosts file
+    if [ -f /etc/hosts ]; then
+        cp /etc/hosts "$CHROOT/etc/hosts" 2>/dev/null
+    fi
+
+    log_ok "Environment set up."
+}
+
+###############################################################################
+# Enter chroot
+###############################################################################
+enter_chroot() {
+    local CMD="${1:-/bin/bash --login}"
+    log_info "Entering Kali chroot: $CMD"
+
+    # Export sensible defaults
+    export TERM=xterm-256color
+    export HOME=/root
+    export USER=root
+    export LANG=C.UTF-8
+    export PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin
+
+    chroot "$CHROOT" /usr/bin/env -i \
+        HOME="$HOME" \
+        USER="$USER" \
+        TERM="$TERM" \
+        LANG="$LANG" \
+        PATH="$PATH" \
+        $CMD
+}
+
+###############################################################################
+# Main
+###############################################################################
+mount_chroot
+setup_env
+enter_chroot "$@"

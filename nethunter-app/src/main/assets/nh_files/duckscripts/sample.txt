@@ -1,0 +1,39 @@
+REM ============================================================
+REM  NetHunterZ - Sample USB Rubber Ducky / HID Ducky Script
+REM
+REM  This sample script demonstrates the DuckyScript syntax used
+REM  by the NetHunter HID Attack payload system.
+REM
+REM  WARNING: For authorised penetration testing use ONLY.
+REM           Misuse of HID attacks may be illegal.
+REM
+REM  Usage:
+REM    1. Load this script into the NetHunterZ HID Attack module.
+REM    2. Select target OS (Linux).
+REM    3. Deploy via the NetHunterZ app.
+REM ============================================================
+
+REM Wait for the target system to be ready
+DELAY 1000
+
+REM Open a terminal (works on most Linux desktops)
+GUI t
+
+REM Wait for terminal to open
+DELAY 800
+
+REM Type a simple payload - open a reverse shell listener note
+STRING echo "NetHunterZ HID test: $(whoami)@$(hostname) $(date)" > /tmp/nh_test.txt
+ENTER
+
+DELAY 200
+
+REM Show the file was created
+STRING cat /tmp/nh_test.txt
+ENTER
+
+DELAY 500
+
+REM Clean up
+STRING rm /tmp/nh_test.txt
+ENTER
