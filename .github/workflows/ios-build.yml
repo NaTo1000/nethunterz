@@ -20,6 +20,8 @@ jobs:
   lint:
     name: SwiftLint
     runs-on: macos-14
+    permissions:
+      contents: read
     steps:
       - name: Checkout
         uses: actions/checkout@v4
@@ -35,6 +37,8 @@ jobs:
     name: Build & Test (iPhone 15 Pro, iOS 17)
     runs-on: macos-14
     needs: lint
+    permissions:
+      contents: read
 
     env:
       SCHEME: JessicAiMedusaCyberstack
@@ -114,6 +118,8 @@ jobs:
     runs-on: macos-14
     needs: build
     if: github.ref == 'refs/heads/main'
+    permissions:
+      contents: read
 
     env:
       SCHEME: JessicAiMedusaCyberstack
