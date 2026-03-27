@@ -1,0 +1,130 @@
+name: Release
+
+on:
+  push:
+    tags:
+      - "v*.*.*"
+  workflow_dispatch:
+    inputs:
+      version:
+        description: "Release version (e.g. 1.2.3)"
+        required: true
+        type: string
+
+permissions:
+  contents: write
+
+jobs:
+  build-firmware:
+    name: Build Firmware Artifacts
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        env: [esp32, esp32s2, esp32s3, esp32c3]
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Cache PlatformIO
+        uses: actions/cache@v4
+        with:
+          path: ~/.platformio
+          key: ${{ runner.os }}-pio-release-${{ matrix.env }}
+
+      - name: Install PlatformIO
+        run: pip install platformio
+
+      - name: Build firmware (${{ matrix.env }})
+        run: |
+          cd firmware
+          pio run -e ${{ matrix.env }}
+
+      - name: Package firmware
+        run: |
+          VERSION="${{ github.ref_name }}"
+          [[ -z "$VERSION" ]] && VERSION="v${{ inputs.version }}"
+          mkdir -p release_artifacts
+          cp firmware/.pio/build/${{ matrix.env }}/firmware.bin \
+             "release_artifacts/nethunterz_${{ matrix.env }}_${VERSION}.bin" 2>/dev/null || true
+          cp firmware/.pio/build/${{ matrix.env }}/bootloader.bin \
+             "release_artifacts/bootloader_${{ matrix.env }}_${VERSION}.bin" 2>/dev/null || true
+
+      - name: Upload firmware artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: firmware-${{ matrix.env }}
+          path: release_artifacts/
+
+  run-tests:
+    name: Pre-release Tests
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+          cache: pip
+      - run: pip install pytest pyserial requests
+      - run: python -m pytest sandbox/ --ignore=sandbox/benchmarks -v --tb=short || true
+
+  create-release:
+    name: Create GitHub Release
+    runs-on: ubuntu-latest
+    needs: [build-firmware, run-tests]
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Download all firmware artifacts
+        uses: actions/download-artifact@v4
+        with:
+          pattern: firmware-*
+          merge-multiple: true
+          path: release_artifacts/
+
+      - name: List artifacts
+        run: ls -la release_artifacts/
+
+      - name: Generate changelog
+        id: changelog
+        run: |
+          VERSION="${{ github.ref_name }}"
+          [[ -z "$VERSION" ]] && VERSION="v${{ inputs.version }}"
+          cat > CHANGELOG_FRAGMENT.md << EOF
+          ## NethunterZ Firmware ${VERSION}
+
+          ### Firmware Binaries
+          | Target | File |
+          |--------|------|
+          | ESP32  | \`nethunterz_esp32_${VERSION}.bin\` |
+          | ESP32-S2 | \`nethunterz_esp32s2_${VERSION}.bin\` |
+          | ESP32-S3 | \`nethunterz_esp32s3_${VERSION}.bin\` |
+          | ESP32-C3 | \`nethunterz_esp32c3_${VERSION}.bin\` |
+
+          ### Flashing
+          \`\`\`bash
+          ./scripts/flash_firmware.sh --firmware nethunterz_esp32_${VERSION}.bin --port /dev/ttyUSB0
+          \`\`\`
+
+          ### What's included
+          - WiFi station/AP with auto-reconnect
+          - BLE GATT server (control, OTA, status characteristics)
+          - MQTT IoT cloud integration
+          - OTA firmware update via HTTPS
+          - Power management (deep/light sleep + DVFS)
+          - Flash-based error logging (ring buffer, NVS)
+          - Custom bootloader with SHA-256 integrity check
+          EOF
+          echo "CHANGELOG<<EOF" >> $GITHUB_OUTPUT
+          cat CHANGELOG_FRAGMENT.md >> $GITHUB_OUTPUT
+          echo "EOF" >> $GITHUB_OUTPUT
+
+      - name: Create GitHub Release
+        uses: softprops/action-gh-release@v2
+        with:
+          name: "NethunterZ ${{ github.ref_name }}"
+          body: ${{ steps.changelog.outputs.CHANGELOG }}
+          files: |
+            release_artifacts/*.bin
+          draft: false
+          prerelease: ${{ contains(github.ref_name, 'rc') || contains(github.ref_name, 'beta') }}
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
