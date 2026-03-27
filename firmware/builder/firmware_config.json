@@ -1,0 +1,51 @@
+{
+  "target": "flipper_zero",
+  "toolchain": "ufbt",
+  "api_version": "71.2",
+  "sdk_version": "70",
+  "build_type": "release",
+  "custom_apps": [
+    "nethunter_hid",
+    "nethunter_gps"
+  ],
+  "extra_flags": [
+    "COMPACT=1",
+    "DEBUG=0"
+  ],
+  "features": {
+    "bluetooth": true,
+    "usb_hid": true,
+    "infrared": true,
+    "subghz": true,
+    "nfc": true,
+    "rfid": true,
+    "ibutton": true,
+    "badusb": true,
+    "u2f": false
+  },
+  "signing": {
+    "enabled": false,
+    "algorithm": "ed25519",
+    "key_path": null,
+    "embed_signature": false
+  },
+  "distribution": {
+    "create_zip": true,
+    "include_resources": true,
+    "include_manifest": true
+  },
+  "channels": {
+    "stable": {
+      "min_api_version": "70.0",
+      "rollout_percent": 100
+    },
+    "release_candidate": {
+      "min_api_version": "70.0",
+      "rollout_percent": 20
+    },
+    "development": {
+      "min_api_version": "71.0",
+      "rollout_percent": 5
+    }
+  }
+}

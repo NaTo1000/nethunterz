@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">NetHunter</string>
+
+    <!-- Navigation -->
+    <string name="nav_flipper">Flipper</string>
+    <string name="nav_ai_control">AI Control</string>
+    <string name="nav_firmware">Firmware</string>
+    <string name="nav_terminal">Terminal</string>
+
+    <!-- Permissions -->
+    <string name="permissions_required">Required permissions not granted. Some features may not work.</string>
+
+    <!-- Flipper Fragment -->
+    <string name="flipper_connection_status">Connection Status</string>
+    <string name="connected">Connected</string>
+    <string name="disconnected">Disconnected</string>
+    <string name="connecting">Connecting…</string>
+    <string name="firmware_version_unknown">Firmware: unknown</string>
+    <string name="connect_via">Connect Via</string>
+    <string name="usb">USB</string>
+    <string name="uart">UART</string>
+    <string name="bluetooth">Bluetooth</string>
+    <string name="disconnect">Disconnect</string>
+    <string name="cli_console">CLI Console</string>
+    <string name="enter_command">Enter command…</string>
+    <string name="send">Send</string>
+
+    <!-- Firmware Fragment -->
+    <string name="current_firmware">Current Firmware</string>
+    <string name="build_date_unknown">Build date: unknown</string>
+    <string name="update_available">Update Available</string>
+    <string name="ready_to_update">Ready to update</string>
+    <string name="check_for_updates">Check for Updates</string>
+    <string name="install_update">Install Update</string>
+    <string name="flash_from_file">Flash from File</string>
+
+    <!-- AI Control Fragment -->
+    <string name="ai_autonomous_mode">Autonomous Mode</string>
+    <string name="ai_idle">Status: Idle</string>
+    <string name="decisions">Decisions</string>
+    <string name="actions_taken">Actions</string>
+    <string name="confidence">Confidence</string>
+    <string name="ml_model_status">ML Model Status</string>
+    <string name="model_not_loaded">Model not loaded</string>
+    <string name="model_loaded">Model loaded (TFLite)</string>
+    <string name="no_decisions_yet">No decisions yet</string>
+    <string name="last_decision">Last decision: %1$s (%.0f%%)</string>
+    <string name="trigger_decision">Trigger Decision</string>
+    <string name="load_ml_model">Load ML Model</string>
+
+    <!-- Service -->
+    <string name="service_running">NetHunter service running</string>
+    <string name="service_notification_channel">NetHunter Service</string>
+    <string name="stop_service">Stop</string>
+
+    <!-- Errors -->
+    <string name="error_no_connection">No active Flipper connection</string>
+    <string name="error_command_failed">Command failed: %1$s</string>
+    <string name="error_update_failed">Firmware update failed: %1$s</string>
+
+    <!-- Channel names -->
+    <string name="channel_stable">Stable</string>
+    <string name="channel_release_candidate">RC</string>
+    <string name="channel_development">Dev</string>
+</resources>

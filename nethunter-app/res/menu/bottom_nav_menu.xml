@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <item
+        android:id="@+id/nav_flipper"
+        android:icon="@drawable/ic_flipper"
+        android:title="@string/nav_flipper" />
+
+    <item
+        android:id="@+id/nav_ai_control"
+        android:icon="@drawable/ic_brain"
+        android:title="@string/nav_ai_control" />
+
+    <item
+        android:id="@+id/nav_firmware"
+        android:icon="@drawable/ic_firmware"
+        android:title="@string/nav_firmware" />
+
+    <item
+        android:id="@+id/nav_terminal"
+        android:icon="@drawable/ic_terminal"
+        android:title="@string/nav_terminal" />
+
+</menu>

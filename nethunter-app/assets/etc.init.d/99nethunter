@@ -1,0 +1,104 @@
+#!/system/bin/sh
+# 99nethunter - NetHunter init.d startup script
+# Place in /etc/init.d/ or /system/etc/init.d/
+# This script is executed at boot time after all other services start
+
+### BEGIN INIT INFO
+# Provides:          nethunter
+# Required-Start:    $network $local_fs
+# Required-Stop:     $network $local_fs
+# Default-Start:     2 3 4 5
+# Default-Stop:      0 1 6
+# Short-Description: NetHunter startup
+# Description:       Starts NetHunter services at boot
+### END INIT INFO
+
+NH_DIR=/data/local/nhsystem
+NH_LOG=/data/local/nhsystem/nethunter-boot.log
+KALI_DIR=$NH_DIR/kali-arm64
+
+log() {
+    echo "[$(date '+%Y-%m-%d %H:%M:%S')] $1" >> "$NH_LOG"
+    echo "$1"
+}
+
+start_nethunter() {
+    log "NetHunter init.d starting..."
+
+    # Create log directory
+    mkdir -p "$NH_DIR"
+
+    # Check if chroot exists
+    if [ ! -d "$KALI_DIR" ]; then
+        log "Kali chroot not installed, skipping"
+        return 0
+    fi
+
+    # Set up /dev/bus/usb permissions for USB host support
+    if [ -d /dev/bus/usb ]; then
+        chmod -R 777 /dev/bus/usb 2>/dev/null
+        log "USB permissions set"
+    fi
+
+    # Set up /dev/ttyACM* permissions for Flipper Zero
+    for dev in /dev/ttyACM* /dev/ttyUSB*; do
+        if [ -e "$dev" ]; then
+            chmod 666 "$dev" 2>/dev/null
+            log "Serial device permission set: $dev"
+        fi
+    done
+
+    # Load USB HID modules if available
+    for mod in usbhid hid_generic; do
+        if modprobe "$mod" 2>/dev/null; then
+            log "Loaded kernel module: $mod"
+        fi
+    done
+
+    # Start NetHunter Android service via am
+    if command -v am > /dev/null 2>&1; then
+        am startservice \
+            --user 0 \
+            -n com.offsec.nethunter/.service.NethunterService \
+            -a com.offsec.nethunter.action.START_SERVICE \
+            --es extra_source "init.d" \
+            2>/dev/null && log "NetHunter service started" || log "Could not start service via am"
+    fi
+
+    log "NetHunter init.d complete"
+}
+
+stop_nethunter() {
+    log "NetHunter init.d stopping..."
+
+    # Stop the Android service
+    if command -v am > /dev/null 2>&1; then
+        am stopservice \
+            --user 0 \
+            -n com.offsec.nethunter/.service.NethunterService \
+            2>/dev/null
+    fi
+
+    log "NetHunter stopped"
+}
+
+case "$1" in
+    start)   start_nethunter ;;
+    stop)    stop_nethunter  ;;
+    restart) stop_nethunter; sleep 1; start_nethunter ;;
+    status)
+        if pgrep -f "nethunter" > /dev/null 2>&1; then
+            echo "NetHunter is running"
+            exit 0
+        else
+            echo "NetHunter is not running"
+            exit 1
+        fi
+        ;;
+    *)
+        echo "Usage: $0 {start|stop|restart|status}"
+        exit 1
+        ;;
+esac
+
+exit 0
