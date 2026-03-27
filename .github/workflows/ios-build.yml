@@ -2,14 +2,16 @@ name: iOS CI
 
 on:
   push:
-    branches: [ main, develop ]
+    branches: [ main, develop, 'copilot/**' ]
     paths:
       - 'ios/**'
+      - 'Package.swift'
       - '.github/workflows/ios-build.yml'
   pull_request:
     branches: [ main, develop ]
     paths:
       - 'ios/**'
+      - 'Package.swift'
       - '.github/workflows/ios-build.yml'
 
 concurrency:
@@ -17,6 +19,24 @@ concurrency:
   cancel-in-progress: true
 
 jobs:
+  swift-test:
+    name: Swift Package Tests (macOS)
+    runs-on: macos-14
+    permissions:
+      contents: read
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Select Xcode 15.4
+        run: sudo xcode-select -switch /Applications/Xcode_15.4.app
+
+      - name: Swift Build (core models)
+        run: swift build -c debug
+
+      - name: Swift Test (core models)
+        run: swift test -c debug --parallel
+
   lint:
     name: SwiftLint
     runs-on: macos-14
@@ -36,7 +56,7 @@ jobs:
   build:
     name: Build & Test (iPhone 15 Pro, iOS 17)
     runs-on: macos-14
-    needs: lint
+    needs: [swift-test, lint]
     permissions:
       contents: read
 

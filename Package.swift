@@ -42,7 +42,7 @@ let package = Package(
             name: "JessicAiMedusaCyberstackCoreTests",
             dependencies: ["JessicAiMedusaCyberstackCore"],
             path: "ios/JessicAiMedusaCyberstackTests",
-            exclude: ["JessicAiMedusaCyberstackTests.swift"]
+            sources: ["CoreModelsTests.swift"]
         ),
     ]
 )
