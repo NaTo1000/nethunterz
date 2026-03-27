@@ -1,0 +1,12 @@
+App(
+    appid="esp32_controller",
+    name="ESP32 Controller",
+    apptype=FlipperAppType.EXTERNAL,
+    entry_point="esp32_controller_app",
+    requires=["gui", "bt"],
+    stack_size=2 * 1024,
+    fap_icon_assets="images",
+    fap_category="GPIO",
+    fap_version=(1, 0),
+    fap_description="Control NethunterZ ESP32 firmware via BLE",
+)
