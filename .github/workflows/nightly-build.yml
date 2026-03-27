@@ -1,0 +1,210 @@
+name: Nightly Build
+
+on:
+  schedule:
+    - cron: '0 2 * * *'
+  workflow_dispatch:
+    inputs:
+      force_release:
+        description: 'Force create a GitHub release'
+        required: false
+        default: 'false'
+
+env:
+  NIGHTLY_VERSION: "nightly-${{ github.run_number }}"
+
+jobs:
+  nightly-android:
+    runs-on: ubuntu-latest
+    timeout-minutes: 90
+    permissions:
+      contents: read
+    outputs:
+      apk_path: ${{ steps.build.outputs.apk_path }}
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Set up JDK 17
+        uses: actions/setup-java@v4
+        with:
+          java-version: '17'
+          distribution: 'temurin'
+          cache: gradle
+
+      - name: Setup Android SDK
+        uses: android-actions/setup-android@v3
+
+      - name: Grant execute permission for gradlew
+        run: chmod +x gradlew
+
+      - name: Set nightly version name
+        run: |
+          sed -i "s/versionName \".*\"/versionName \"nightly-$(date +%Y%m%d)-${{ github.run_number }}\"/" \
+            nethunter-app/build.gradle
+
+      - name: Build release APK
+        id: build
+        env:
+          KEYSTORE_FILE: ${{ secrets.KEYSTORE_BASE64 }}
+          KEYSTORE_PASSWORD: ${{ secrets.KEYSTORE_PASSWORD }}
+          KEY_ALIAS: ${{ secrets.KEY_ALIAS }}
+          KEY_PASSWORD: ${{ secrets.KEY_PASSWORD }}
+        run: |
+          if [ -n "$KEYSTORE_FILE" ]; then
+            echo "$KEYSTORE_FILE" | base64 --decode > nethunter-app/nethunter-release.jks
+            ./gradlew assembleRelease \
+              -Pandroid.injected.signing.store.file=nethunter-release.jks \
+              -Pandroid.injected.signing.store.password="$KEYSTORE_PASSWORD" \
+              -Pandroid.injected.signing.key.alias="$KEY_ALIAS" \
+              -Pandroid.injected.signing.key.password="$KEY_PASSWORD" \
+              --no-daemon
+          else
+            ./gradlew assembleDebug --no-daemon
+          fi
+          APK=$(find nethunter-app/build/outputs/apk -name "*.apk" | head -1)
+          echo "apk_path=$APK" >> $GITHUB_OUTPUT
+
+      - name: Run unit tests
+        run: ./gradlew test --no-daemon
+        continue-on-error: true
+
+      - name: Upload nightly APK
+        uses: actions/upload-artifact@v4
+        with:
+          name: nethunter-nightly-apk-${{ github.run_number }}
+          path: ${{ steps.build.outputs.apk_path }}
+          retention-days: 7
+
+  nightly-firmware:
+    runs-on: ubuntu-latest
+    timeout-minutes: 90
+    permissions:
+      contents: read
+    outputs:
+      firmware_version: ${{ steps.version.outputs.version }}
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          submodules: recursive
+
+      - name: Set up Python 3.11
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+          cache: 'pip'
+
+      - name: Install dependencies
+        run: |
+          pip install ufbt scons requests boto3 google-cloud-storage cryptography
+
+      - name: Install ufbt toolchain
+        run: |
+          python -m ufbt update
+          echo "$HOME/.ufbt/toolchain/bin" >> $GITHUB_PATH
+
+      - name: Set firmware version
+        id: version
+        run: |
+          VERSION="nightly-$(date +%Y%m%d)-${{ github.run_number }}"
+          echo "version=$VERSION" >> $GITHUB_OUTPUT
+
+      - name: Build firmware
+        run: |
+          python firmware/builder/build_firmware.py \
+            --version "${{ steps.version.outputs.version }}" \
+            --config firmware/builder/firmware_config.json \
+            --output firmware/build/output
+
+      - name: Validate firmware
+        run: |
+          python firmware/validator/validate_firmware.py \
+            --firmware-dir firmware/build/output \
+            --version "${{ steps.version.outputs.version }}"
+
+      - name: Deploy nightly firmware to S3
+        env:
+          AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          AWS_DEFAULT_REGION: ${{ secrets.AWS_REGION || 'us-east-1' }}
+          S3_BUCKET: ${{ secrets.S3_FIRMWARE_BUCKET }}
+        run: |
+          if [ -n "$S3_BUCKET" ]; then
+            python cloud/storage/s3_uploader.py \
+              --bucket "$S3_BUCKET" \
+              --firmware-dir firmware/build/output \
+              --version "${{ steps.version.outputs.version }}" \
+              --prefix nightly/
+          else
+            echo "S3_BUCKET not configured, skipping deploy"
+          fi
+        continue-on-error: true
+
+      - name: Upload firmware artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: flipper-nightly-firmware-${{ github.run_number }}
+          path: firmware/build/output/
+          retention-days: 7
+
+  create-release:
+    runs-on: ubuntu-latest
+    needs: [ nightly-android, nightly-firmware ]
+    if: always() && (needs.nightly-android.result == 'success' || needs.nightly-firmware.result == 'success')
+    permissions:
+      contents: write
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Download APK artifact
+        uses: actions/download-artifact@v4
+        with:
+          name: nethunter-nightly-apk-${{ github.run_number }}
+          path: release-assets/apk
+        continue-on-error: true
+
+      - name: Download firmware artifact
+        uses: actions/download-artifact@v4
+        with:
+          name: flipper-nightly-firmware-${{ github.run_number }}
+          path: release-assets/firmware
+        continue-on-error: true
+
+      - name: Generate release notes
+        id: release_notes
+        run: |
+          NOTES="## Nightly Build $(date +%Y-%m-%d) (Run #${{ github.run_number }})
+
+          **Commit:** ${{ github.sha }}
+          **Branch:** ${{ github.ref_name }}
+
+          ### Included Components
+          - Android App (NetHunter)
+          - Flipper Zero Firmware
+
+          ### Changes since last nightly
+          $(git log --oneline -10 --no-merges)
+          "
+          echo "notes<<EOF" >> $GITHUB_OUTPUT
+          echo "$NOTES" >> $GITHUB_OUTPUT
+          echo "EOF" >> $GITHUB_OUTPUT
+
+      - name: Create nightly release
+        if: github.event.inputs.force_release == 'true' || github.event_name == 'schedule'
+        uses: ncipollo/release-action@v1
+        with:
+          tag: nightly-${{ github.run_number }}
+          name: "Nightly Build $(date +%Y-%m-%d)"
+          body: ${{ steps.release_notes.outputs.notes }}
+          prerelease: true
+          artifacts: "release-assets/**/*"
+          token: ${{ secrets.GITHUB_TOKEN }}
+          allowUpdates: true
+          removeArtifacts: false

@@ -1,0 +1,27 @@
+REM NetHunter Hello World DuckyScript
+REM Opens a text editor and types a message
+
+REM Wait for system to be ready
+DELAY 1000
+
+REM Open Run dialog (Windows) or Spotlight (macOS)
+GUI r
+
+DELAY 500
+
+REM Type notepad command
+STRING notepad
+
+DELAY 100
+
+ENTER
+
+DELAY 1500
+
+REM Type the message
+STRING Hello from NetHunter!
+ENTER
+STRING This is a DuckyScript test payload.
+ENTER
+STRING Powered by Flipper Zero + Android.
+ENTER

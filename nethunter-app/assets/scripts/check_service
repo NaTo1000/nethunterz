@@ -1,0 +1,94 @@
+#!/system/bin/sh
+# check_service - Check if NetHunter services are running
+# Returns 0 if all services are running, 1 if any are stopped
+
+NH_DIR=/data/local/nhsystem
+KALI_DIR=$NH_DIR/kali-arm64
+
+# Service check functions
+check_chroot() {
+    if mountpoint -q "$KALI_DIR/proc" 2>/dev/null; then
+        echo "chroot:running"
+        return 0
+    else
+        echo "chroot:stopped"
+        return 1
+    fi
+}
+
+check_ssh() {
+    if pgrep -x "sshd" > /dev/null 2>&1; then
+        SSH_PORT=$(netstat -tlnp 2>/dev/null | grep sshd | awk '{print $4}' | cut -d: -f2)
+        echo "sshd:running:${SSH_PORT:-22}"
+        return 0
+    else
+        echo "sshd:stopped"
+        return 1
+    fi
+}
+
+check_networking() {
+    if ip link show 2>/dev/null | grep -q "state UP"; then
+        echo "network:up"
+        return 0
+    else
+        echo "network:down"
+        return 1
+    fi
+}
+
+check_bluetooth() {
+    if [ -d /sys/class/bluetooth ] && ls /sys/class/bluetooth/ 2>/dev/null | grep -q "hci"; then
+        HCI=$(ls /sys/class/bluetooth/ | head -1)
+        STATE=$(cat /sys/class/bluetooth/$HCI/state 2>/dev/null || echo "unknown")
+        echo "bluetooth:${STATE}:${HCI}"
+        return 0
+    else
+        echo "bluetooth:unavailable"
+        return 1
+    fi
+}
+
+check_usb() {
+    if ls /dev/ttyACM* /dev/ttyUSB* 2>/dev/null | grep -q "tty"; then
+        DEVICES=$(ls /dev/ttyACM* /dev/ttyUSB* 2>/dev/null | tr '\n' ',')
+        echo "usb_serial:available:${DEVICES%,}"
+        return 0
+    else
+        echo "usb_serial:none"
+        return 1
+    fi
+}
+
+check_gps() {
+    if [ -e /dev/ttyS3 ] || [ -e /dev/ttyHSL0 ]; then
+        echo "gps:device_found"
+        return 0
+    else
+        echo "gps:no_device"
+        return 1
+    fi
+}
+
+# Main: check all or specific service
+OVERALL=0
+
+case "$1" in
+    chroot)    check_chroot    ;;
+    ssh)       check_ssh       ;;
+    network)   check_networking ;;
+    bluetooth) check_bluetooth ;;
+    usb)       check_usb       ;;
+    gps)       check_gps       ;;
+    *)
+        # Check all services
+        check_chroot    || OVERALL=1
+        check_ssh       || OVERALL=1
+        check_networking || OVERALL=1
+        check_bluetooth || true  # Non-critical
+        check_usb       || true  # Non-critical
+        check_gps       || true  # Non-critical
+        ;;
+esac
+
+exit $OVERALL

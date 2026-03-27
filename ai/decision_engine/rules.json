@@ -1,0 +1,79 @@
+[
+  {
+    "id": "r001",
+    "description": "Connect to Flipper Zero if not connected",
+    "condition": "flipper_not_connected",
+    "action": "CONNECT_FLIPPER",
+    "priority": 0.90,
+    "enabled": true,
+    "params": {
+      "retry_attempts": 3,
+      "retry_delay_ms": 2000
+    }
+  },
+  {
+    "id": "r002",
+    "description": "Send periodic ping to verify connection is alive",
+    "condition": "flipper_idle",
+    "action": "SEND_PING",
+    "priority": 0.60,
+    "enabled": true,
+    "params": {
+      "timeout_ms": 3000
+    }
+  },
+  {
+    "id": "r003",
+    "description": "Retrieve firmware version after connecting",
+    "condition": "version_unknown",
+    "action": "GET_VERSION",
+    "priority": 0.70,
+    "enabled": true,
+    "params": {}
+  },
+  {
+    "id": "r004",
+    "description": "Periodically check Flipper storage status",
+    "condition": "periodic_check",
+    "action": "CHECK_STORAGE",
+    "priority": 0.40,
+    "enabled": true,
+    "params": {
+      "storage_path": "/"
+    }
+  },
+  {
+    "id": "r005",
+    "description": "Disconnect on persistent connection error",
+    "condition": "connection_error",
+    "action": "DISCONNECT",
+    "priority": 0.95,
+    "enabled": true,
+    "params": {
+      "min_errors_before_disconnect": 3
+    }
+  },
+  {
+    "id": "r006",
+    "description": "Run BadUSB script when explicitly authorized",
+    "condition": "badusb_authorized",
+    "action": "RUN_BADUSB",
+    "priority": 0.85,
+    "enabled": false,
+    "params": {
+      "require_explicit_authorization": true,
+      "script_path": "/ext/badusb/nethunter_payload.txt"
+    }
+  },
+  {
+    "id": "r007",
+    "description": "Restart connection after prolonged disconnection",
+    "condition": "long_disconnection",
+    "action": "CONNECT_FLIPPER",
+    "priority": 0.75,
+    "enabled": true,
+    "params": {
+      "disconnection_threshold_seconds": 120
+    }
+  }
+]

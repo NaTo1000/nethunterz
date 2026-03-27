@@ -1,0 +1,174 @@
+name: Deploy to Cloud
+
+on:
+  release:
+    types: [ published ]
+  workflow_dispatch:
+    inputs:
+      version:
+        description: 'Version to deploy'
+        required: true
+        default: 'latest'
+      environment:
+        description: 'Target environment (staging/production)'
+        required: false
+        default: 'production'
+
+jobs:
+  deploy-s3:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    environment: ${{ github.event.inputs.environment || 'production' }}
+    permissions:
+      contents: read
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up Python 3.11
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      - name: Install dependencies
+        run: pip install boto3 requests cryptography
+
+      - name: Download release firmware
+        if: github.event_name == 'release'
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          gh release download "${{ github.event.release.tag_name }}" \
+            --pattern "*.bin" \
+            --pattern "*.sig" \
+            --dir firmware/release-assets/
+        continue-on-error: true
+
+      - name: Upload firmware to S3
+        env:
+          AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          AWS_DEFAULT_REGION: ${{ secrets.AWS_REGION || 'us-east-1' }}
+          S3_BUCKET: ${{ secrets.S3_FIRMWARE_BUCKET }}
+        run: |
+          VERSION="${{ github.event.release.tag_name || github.event.inputs.version }}"
+          python cloud/storage/s3_uploader.py \
+            --bucket "$S3_BUCKET" \
+            --firmware-dir firmware/release-assets/ \
+            --version "$VERSION" \
+            --prefix releases/ \
+            --make-public
+
+      - name: Update S3 latest pointer
+        env:
+          AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          AWS_DEFAULT_REGION: ${{ secrets.AWS_REGION || 'us-east-1' }}
+          S3_BUCKET: ${{ secrets.S3_FIRMWARE_BUCKET }}
+        run: |
+          VERSION="${{ github.event.release.tag_name || github.event.inputs.version }}"
+          python - <<EOF
+          import boto3, json
+          s3 = boto3.client('s3')
+          manifest = {
+              "latest_version": "$VERSION",
+              "release_url": "https://$S3_BUCKET.s3.amazonaws.com/releases/$VERSION/",
+              "released_at": "$(date -u +%Y-%m-%dT%H:%M:%SZ)"
+          }
+          s3.put_object(
+              Bucket="$S3_BUCKET",
+              Key="latest.json",
+              Body=json.dumps(manifest),
+              ContentType="application/json",
+              ACL="public-read"
+          )
+          print("Updated latest.json")
+          EOF
+
+  deploy-gcs:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    environment: ${{ github.event.inputs.environment || 'production' }}
+    permissions:
+      contents: read
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up Python 3.11
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      - name: Install dependencies
+        run: pip install google-cloud-storage requests
+
+      - name: Authenticate to Google Cloud
+        uses: google-github-actions/auth@v2
+        with:
+          credentials_json: ${{ secrets.GCP_SERVICE_ACCOUNT_KEY }}
+        continue-on-error: true
+
+      - name: Download release firmware
+        if: github.event_name == 'release'
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          gh release download "${{ github.event.release.tag_name }}" \
+            --pattern "*.bin" \
+            --pattern "*.sig" \
+            --dir firmware/release-assets/
+        continue-on-error: true
+
+      - name: Upload firmware to GCS
+        env:
+          GCS_BUCKET: ${{ secrets.GCS_FIRMWARE_BUCKET }}
+        run: |
+          VERSION="${{ github.event.release.tag_name || github.event.inputs.version }}"
+          python cloud/storage/gcs_uploader.py \
+            --bucket "$GCS_BUCKET" \
+            --firmware-dir firmware/release-assets/ \
+            --version "$VERSION" \
+            --prefix releases/
+
+  update-dashboard:
+    runs-on: ubuntu-latest
+    needs: [ deploy-s3, deploy-gcs ]
+    if: always() && (needs.deploy-s3.result == 'success' || needs.deploy-gcs.result == 'success')
+    timeout-minutes: 15
+    permissions:
+      contents: read
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up Python 3.11
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      - name: Install dependencies
+        run: pip install requests
+
+      - name: Notify dashboard of new release
+        env:
+          DASHBOARD_API_URL: ${{ secrets.DASHBOARD_API_URL }}
+          DASHBOARD_API_KEY: ${{ secrets.DASHBOARD_API_KEY }}
+        run: |
+          VERSION="${{ github.event.release.tag_name || github.event.inputs.version }}"
+          python firmware/updater/autonomous_updater.py \
+            --notify-dashboard \
+            --version "$VERSION" \
+            --release-notes "${{ github.event.release.body }}"
+        continue-on-error: true
+
+      - name: Post deployment summary
+        run: |
+          echo "## Deployment Summary" >> $GITHUB_STEP_SUMMARY
+          echo "- **Version:** ${{ github.event.release.tag_name || github.event.inputs.version }}" >> $GITHUB_STEP_SUMMARY
+          echo "- **S3 Deploy:** ${{ needs.deploy-s3.result }}" >> $GITHUB_STEP_SUMMARY
+          echo "- **GCS Deploy:** ${{ needs.deploy-gcs.result }}" >> $GITHUB_STEP_SUMMARY
+          echo "- **Deployed at:** $(date -u)" >> $GITHUB_STEP_SUMMARY
