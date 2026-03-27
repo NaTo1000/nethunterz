@@ -1,4 +1,4 @@
-"""Geofencing for LoRa mesh nodes with AI-controlled alerts and defences."""
+"""Geofencing for LoRa mesh nodes with AI-controlled alerts and defenses."""
 from __future__ import annotations
 import logging
 import math
@@ -53,7 +53,7 @@ class GeofenceEvent:
 
 
 def _haversine_m(lat1: float, lon1: float, lat2: float, lon2: float) -> float:
-    """Return distance in metres between two WGS-84 coordinates."""
+    """Return distance in meters between two WGS-84 coordinates."""
     R = 6_371_000.0
     phi1, phi2 = math.radians(lat1), math.radians(lat2)
     dphi = math.radians(lat2 - lat1)

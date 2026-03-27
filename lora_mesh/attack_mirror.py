@@ -61,7 +61,7 @@ class DefenseEvent:
 
 
 class AttackMirrorDefense:
-    """Detects, isolates, and neutralises suspicious mesh activity.
+    """Detects, isolates, and neutralizes suspicious mesh activity.
 
     Uses AI-driven anomaly detection to classify packets and respond
     with: logging, isolation, mirroring back to origin, or node shutdown.
