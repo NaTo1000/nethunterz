@@ -1,0 +1,45 @@
+# Python
+__pycache__/
+*.py[cod]
+*.pyo
+*.pyd
+.Python
+*.egg-info/
+dist/
+build/
+*.egg
+.venv/
+venv/
+env/
+.env
+
+# Android / Gradle
+.gradle/
+local.properties
+*.iml
+.idea/
+.DS_Store
+/build/
+nethunter-app/build/
+*.apk
+*.aab
+*.ap_
+*.class
+/bin/
+/gen/
+nethunter-release.jks
+
+# Java compiled output (not wrapper jar)
+*.class
+
+# Node / JS (if any)
+node_modules/
+npm-debug.log
+
+# Misc
+*.log
+*.tmp
+*.swp
+*.swo
+.DS_Store
+Thumbs.db
