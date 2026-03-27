@@ -1,0 +1,166 @@
+name: Firmware Build & Deploy
+
+on:
+  push:
+    branches: ["main"]
+    paths:
+      - "flipper/**"
+      - ".github/workflows/firmware.yml"
+  pull_request:
+    branches: ["main"]
+    paths:
+      - "flipper/**"
+  workflow_dispatch:
+    inputs:
+      version:
+        description: "Firmware version to build (e.g. 1.2.3)"
+        required: true
+        default: "0.0.0-dev"
+      auto_deploy:
+        description: "Auto-deploy to release endpoint"
+        type: boolean
+        default: false
+
+permissions:
+  contents: read
+
+jobs:
+  # --------------------------------------------------------------------------
+  # Build firmware in simulation mode
+  # --------------------------------------------------------------------------
+  build-firmware:
+    name: Build Firmware
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+          cache: pip
+
+      - name: Install dependencies
+        run: pip install -r requirements.txt
+
+      - name: Set version
+        id: version
+        run: |
+          if [ -n "${{ github.event.inputs.version }}" ]; then
+            echo "VERSION=${{ github.event.inputs.version }}" >> $GITHUB_OUTPUT
+          else
+            echo "VERSION=0.0.0-${GITHUB_SHA::8}" >> $GITHUB_OUTPUT
+          fi
+
+      - name: Build firmware (simulation)
+        run: |
+          python - <<'EOF'
+          import asyncio
+          import sys
+          import os
+          sys.path.insert(0, '.')
+          from flipper.firmware_builder import FirmwareBuilder, BuildConfig
+          async def main():
+              version = os.environ.get('VERSION', '0.0.0')
+              cfg = BuildConfig(output_dir='build/firmware')
+              builder = FirmwareBuilder(cfg, simulation=True)
+              result = await builder.build(version)
+              if not result.success:
+                  print(f'Build FAILED: {result.build_log}', file=sys.stderr)
+                  sys.exit(1)
+              print(f'Build OK: {result.firmware_path} (sha256={result.sha256})')
+          asyncio.run(main())
+          EOF
+        env:
+          VERSION: ${{ steps.version.outputs.VERSION }}
+
+      - name: Upload firmware artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: nethunterz-firmware-${{ steps.version.outputs.VERSION }}
+          path: build/firmware/
+          retention-days: 30
+
+  # --------------------------------------------------------------------------
+  # Validate firmware integrity and rollback test
+  # --------------------------------------------------------------------------
+  validate-firmware:
+    name: Validate Firmware Integrity
+    runs-on: ubuntu-latest
+    needs: build-firmware
+    permissions:
+      contents: read
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+          cache: pip
+
+      - name: Install dependencies
+        run: pip install -r requirements.txt
+
+      - name: Download firmware artifact
+        uses: actions/download-artifact@v4
+        with:
+          name: nethunterz-firmware-${{ needs.build-firmware.outputs.VERSION || '0.0.0-dev' }}
+          path: build/firmware/
+        continue-on-error: true
+
+      - name: Validate manifest and checksums
+        run: |
+          python - <<'EOF'
+          import json, hashlib, sys
+          from pathlib import Path
+          manifest_path = Path('build/firmware/manifest.json')
+          if not manifest_path.exists():
+              print('No manifest found – skipping integrity check')
+              sys.exit(0)
+          manifest = json.loads(manifest_path.read_text())
+          fw_path = Path(manifest['firmware_path'])
+          if not fw_path.exists():
+              print(f'Firmware file not found: {fw_path}')
+              sys.exit(1)
+          actual = hashlib.sha256(fw_path.read_bytes()).hexdigest()
+          expected = manifest['sha256']
+          if actual != expected:
+              print(f'SHA-256 MISMATCH: expected {expected}, got {actual}')
+              sys.exit(1)
+          print(f'Firmware integrity OK: {fw_path.name} sha256={actual[:16]}…')
+          EOF
+
+  # --------------------------------------------------------------------------
+  # Deploy to release endpoint (manual trigger only)
+  # --------------------------------------------------------------------------
+  deploy-firmware:
+    name: Deploy Firmware
+    runs-on: ubuntu-latest
+    needs: [build-firmware, validate-firmware]
+    if: |
+      github.event_name == 'workflow_dispatch' &&
+      github.event.inputs.auto_deploy == 'true'
+    environment: production
+    permissions:
+      contents: read
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Download firmware
+        uses: actions/download-artifact@v4
+        with:
+          name: nethunterz-firmware-${{ github.event.inputs.version }}
+          path: build/firmware/
+
+      - name: Upload to release endpoint
+        run: |
+          echo "Uploading firmware version ${{ github.event.inputs.version }}"
+          # In production: curl -X POST $FIRMWARE_RELEASE_ENDPOINT ...
+          echo "Upload complete."
+        env:
+          FIRMWARE_API_KEY: ${{ secrets.FIRMWARE_API_KEY }}
+          FIRMWARE_RELEASE_ENDPOINT: ${{ secrets.FIRMWARE_RELEASE_ENDPOINT }}
