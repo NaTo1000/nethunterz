@@ -69,7 +69,7 @@ async def run(args: argparse.Namespace) -> None:
 
 def main() -> None:
     parser = argparse.ArgumentParser(description="nethunterz NRF module runtime")
-    parser.add_argument("--simulation", action="store_true", default=True)
+    parser.add_argument("--simulation", action="store_true")
     parser.add_argument("--log-dir", default="logs/nrf")
     parser.add_argument("--hop", action="store_true", default=False)
     args = parser.parse_args()

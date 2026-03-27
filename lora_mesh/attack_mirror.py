@@ -67,9 +67,9 @@ class AttackMirrorDefense:
     with: logging, isolation, mirroring back to origin, or node shutdown.
     """
 
-    HIGH_PACKET_RATE_THRESHOLD = 50
-    RSSI_ANOMALY_THRESHOLD_DBM = -30.0
-    DUPLICATE_PAYLOAD_WINDOW = 10
+    HIGH_PACKET_RATE_THRESHOLD = 50      # packets per second per node
+    RSSI_ANOMALY_THRESHOLD_DBM = -30.0   # dBm; signals stronger than this are anomalous
+    DUPLICATE_PAYLOAD_WINDOW = 10        # last N payloads checked for replay attacks
 
     def __init__(
         self, response_callback: Optional[Callable[[DefenseEvent], None]] = None
