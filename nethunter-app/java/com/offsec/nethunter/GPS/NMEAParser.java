@@ -173,7 +173,7 @@ public class NMEAParser {
      * Parse GLL - Geographic Position, Latitude/Longitude
      */
     private boolean parseGLL(String[] fields) {
-        if (fields.length < 6) return false;
+        if (fields.length < 7) return false;
 
         String status = fields[6];
         if (!"A".equalsIgnoreCase(status)) return false;

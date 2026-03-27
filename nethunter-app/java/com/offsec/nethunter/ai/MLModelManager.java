@@ -11,7 +11,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
-import java.nio.MappedByteBuffer;
+import java.nio.ByteBuffer;
 import java.nio.channels.FileChannel;
 import java.util.concurrent.atomic.AtomicBoolean;
 
@@ -51,7 +51,7 @@ public class MLModelManager {
      */
     public boolean loadModels() {
         try {
-            MappedByteBuffer modelBuffer = loadModelFile(MODEL_ASSET_PATH);
+            ByteBuffer modelBuffer = loadModelFile(MODEL_ASSET_PATH);
             if (modelBuffer == null) {
                 Log.w(TAG, "Model file not found in assets: " + MODEL_ASSET_PATH);
                 return false;
@@ -143,23 +143,16 @@ public class MLModelManager {
         return new InferenceResult(label, maxProb, probabilities);
     }
 
-    private MappedByteBuffer loadModelFile(String assetPath) {
+    private ByteBuffer loadModelFile(String assetPath) {
         try {
             AssetManager assetManager = context.getAssets();
-            // Check if the file exists
-            String[] files = assetManager.list("models");
-            if (files == null) return null;
-
             try (InputStream is = assetManager.open(assetPath)) {
-                // Read all bytes for model
                 byte[] bytes = is.readAllBytes();
                 ByteBuffer buffer = ByteBuffer.allocateDirect(bytes.length)
                     .order(ByteOrder.nativeOrder());
                 buffer.put(bytes);
                 buffer.rewind();
-                // Return as MappedByteBuffer is not directly available from assets;
-                // wrap as ByteBuffer (TFLite Interpreter accepts ByteBuffer too)
-                return null; // handled below
+                return buffer;
             }
         } catch (IOException e) {
             Log.d(TAG, "Asset not found: " + assetPath);

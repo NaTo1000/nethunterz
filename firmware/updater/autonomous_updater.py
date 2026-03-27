@@ -158,17 +158,13 @@ class AutonomousUpdater:
 
 def main():
     parser = argparse.ArgumentParser(description='Autonomous firmware update orchestrator')
-    subparsers = parser.add_subparsers(dest='command')
 
-    # notify-dashboard sub-command
-    notify_parser = subparsers.add_parser('--notify-dashboard', add_help=False)
     parser.add_argument('--notify-dashboard', action='store_true',
                         help='Notify dashboard of new firmware release')
     parser.add_argument('--version',       required=False, help='Firmware version')
     parser.add_argument('--sha256',        required=False, help='Firmware SHA256 checksum')
     parser.add_argument('--release-notes', required=False, help='Release notes text')
 
-    # check sub-command
     parser.add_argument('--check',           action='store_true',
                         help='Check for available updates')
     parser.add_argument('--current-version', default='0.0.0',
