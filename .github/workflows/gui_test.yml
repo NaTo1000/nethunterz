@@ -1,0 +1,90 @@
+name: GUI & Quantum Tests
+
+on:
+  push:
+    branches: [main, develop, "copilot/**"]
+    paths:
+      - "gui/**"
+      - "quantum/**"
+      - ".github/workflows/gui_test.yml"
+  pull_request:
+    branches: [main, develop]
+    paths:
+      - "gui/**"
+      - "quantum/**"
+
+jobs:
+  test-gui:
+    name: GUI Tests (Python ${{ matrix.python-version }})
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+    strategy:
+      matrix:
+        python-version: ["3.9", "3.10", "3.11"]
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up Python ${{ matrix.python-version }}
+        uses: actions/setup-python@v5
+        with:
+          python-version: ${{ matrix.python-version }}
+          cache: pip
+
+      - name: Install system dependencies
+        run: |
+          sudo apt-get update -qq
+          sudo apt-get install -y --no-install-recommends \
+            libglib2.0-0 libsm6 libxrender1 libxext6 \
+            xvfb libxcb-icccm4 libxcb-image0 libxcb-keysyms1 \
+            libxcb-randr0 libxcb-render-util0 libxcb-xinerama0 \
+            libxcb-xfixes0 x11-utils
+
+      - name: Install Python dependencies
+        run: |
+          pip install --upgrade pip
+          pip install -r gui/requirements.txt
+          pip install pytest pytest-cov pytest-qt
+
+      - name: Run GUI import tests
+        run: |
+          cd gui
+          python -c "from app.serial_manager import SerialManager; print('SerialManager OK')"
+          python -c "from app.background_researcher import BackgroundResearcher; print('BackgroundResearcher OK')"
+
+      - name: Run quantum module tests
+        run: |
+          pip install qiskit qiskit-aer || true
+          python -m pytest sandbox/test_quantum.py -v --tb=short || true
+
+      - name: Lint with flake8
+        run: |
+          pip install flake8
+          flake8 gui/ quantum/ --max-line-length=120 --ignore=E501,W503 --count --statistics || true
+
+  test-quantum:
+    name: Quantum Integration Tests
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+          cache: pip
+      - name: Install dependencies
+        run: |
+          pip install --upgrade pip
+          pip install qiskit qiskit-aer pytest pytest-cov
+          pip install -r gui/requirements.txt
+      - name: Run quantum tests
+        run: |
+          python -m pytest sandbox/test_quantum.py -v --tb=short --cov=quantum --cov-report=xml
+      - name: Upload coverage
+        uses: actions/upload-artifact@v4
+        with:
+          name: quantum-coverage
+          path: coverage.xml

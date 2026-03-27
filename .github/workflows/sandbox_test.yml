@@ -1,0 +1,93 @@
+name: Sandbox Test Suite
+
+on:
+  push:
+    branches: [main, develop, "copilot/**"]
+  pull_request:
+    branches: [main, develop]
+
+jobs:
+  run-tests:
+    name: Sandbox Tests
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+    strategy:
+      matrix:
+        python-version: ["3.10", "3.11"]
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up Python ${{ matrix.python-version }}
+        uses: actions/setup-python@v5
+        with:
+          python-version: ${{ matrix.python-version }}
+          cache: pip
+
+      - name: Install dependencies
+        run: |
+          pip install --upgrade pip
+          pip install pytest pytest-cov pytest-json-report
+          pip install pyserial requests
+          # Install PyQt5 with headless support
+          pip install PyQt5 || true
+          # Optional quantum deps
+          pip install qiskit qiskit-aer || true
+
+      - name: Run firmware tests
+        run: |
+          python -m pytest sandbox/test_firmware.py -v --tb=short
+
+      - name: Run BLE tests
+        run: |
+          python -m pytest sandbox/test_ble.py -v --tb=short
+
+      - name: Run WiFi tests
+        run: |
+          python -m pytest sandbox/test_wifi.py -v --tb=short
+
+      - name: Run quantum tests
+        run: |
+          python -m pytest sandbox/test_quantum.py -v --tb=short || true
+
+      - name: Run all tests with coverage
+        run: |
+          python -m pytest sandbox/ -v --tb=short \
+            --cov=. \
+            --cov-report=xml \
+            --cov-report=term-missing \
+            --json-report --json-report-file=test-results.json \
+            --ignore=sandbox/benchmarks || true
+
+      - name: Run benchmarks
+        run: |
+          python sandbox/benchmarks/benchmark_runtime.py
+          python sandbox/benchmarks/benchmark_ota.py
+
+      - name: Upload test results
+        uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: test-results-py${{ matrix.python-version }}
+          path: |
+            test-results.json
+            coverage.xml
+          retention-days: 7
+
+      - name: Test summary
+        if: always()
+        run: |
+          echo "## Test Results" >> $GITHUB_STEP_SUMMARY
+          python -c "
+          import json, sys
+          try:
+              with open('test-results.json') as f:
+                  data = json.load(f)
+              summary = data.get('summary', {})
+              print(f'Passed: {summary.get(\"passed\", 0)}')
+              print(f'Failed: {summary.get(\"failed\", 0)}')
+              print(f'Errors: {summary.get(\"error\", 0)}')
+          except: print('Results not available')
+          " >> $GITHUB_STEP_SUMMARY || true

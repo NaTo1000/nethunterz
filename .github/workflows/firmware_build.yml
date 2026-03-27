@@ -1,0 +1,80 @@
+name: ESP32 Firmware Build
+
+on:
+  push:
+    branches: [main, develop, "copilot/**"]
+    paths:
+      - "firmware/**"
+      - ".github/workflows/firmware_build.yml"
+  pull_request:
+    branches: [main, develop]
+    paths:
+      - "firmware/**"
+
+jobs:
+  build:
+    name: Build (${{ matrix.env }})
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+    strategy:
+      fail-fast: false
+      matrix:
+        env: [esp32, esp32s2, esp32s3, esp32c3]
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Cache PlatformIO
+        uses: actions/cache@v4
+        with:
+          path: |
+            ~/.platformio
+            firmware/.pio
+          key: ${{ runner.os }}-pio-${{ matrix.env }}-${{ hashFiles('firmware/platformio.ini') }}
+          restore-keys: |
+            ${{ runner.os }}-pio-${{ matrix.env }}-
+            ${{ runner.os }}-pio-
+
+      - name: Install PlatformIO
+        run: pip install platformio
+
+      - name: Build firmware (${{ matrix.env }})
+        run: |
+          cd firmware
+          pio run -e ${{ matrix.env }}
+
+      - name: Upload firmware artifact
+        uses: actions/upload-artifact@v4
+        if: matrix.env == 'esp32'
+        with:
+          name: firmware-${{ matrix.env }}-${{ github.sha }}
+          path: |
+            firmware/.pio/build/${{ matrix.env }}/firmware.bin
+            firmware/.pio/build/${{ matrix.env }}/bootloader.bin
+            firmware/.pio/build/${{ matrix.env }}/partitions.bin
+          retention-days: 30
+
+  size-report:
+    name: Firmware Size Report
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+    needs: build
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/cache@v4
+        with:
+          path: ~/.platformio
+          key: ${{ runner.os }}-pio-esp32-${{ hashFiles('firmware/platformio.ini') }}
+      - name: Install PlatformIO
+        run: pip install platformio
+      - name: Generate size report
+        run: |
+          cd firmware
+          pio run -e esp32 2>&1 | tee build_output.txt
+          echo "## Firmware Size Report" >> $GITHUB_STEP_SUMMARY
+          echo '```' >> $GITHUB_STEP_SUMMARY
+          grep -E "(RAM:|Flash:|\.pio)" build_output.txt || true >> $GITHUB_STEP_SUMMARY
+          echo '```' >> $GITHUB_STEP_SUMMARY

@@ -1,0 +1,30 @@
+idf_component_register(
+    SRCS
+        "main.c"
+        "wifi_manager.c"
+        "ble_manager.c"
+        "iot_manager.c"
+        "power_manager.c"
+        "error_logger.c"
+        "ota_updater.c"
+    INCLUDE_DIRS "."
+    REQUIRES
+        nvs_flash
+        esp_wifi
+        esp_bt
+        esp_netif
+        mqtt
+        esp_http_client
+        esp_https_ota
+        esp_timer
+        driver
+        fatfs
+        spiffs
+        wpa_supplicant
+        mbedtls
+        esp_system
+        freertos
+        log
+        heap
+        spi_flash
+)
