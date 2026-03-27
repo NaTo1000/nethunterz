@@ -1,0 +1,94 @@
+#!/system/bin/sh
+# 99nethunter - NetHunterZ init.d startup script
+#
+# This script is executed by run-parts at the end of the boot sequence
+# to set up NetHunter-specific configuration inside the Kali chroot.
+#
+# Place this file at:
+#   /data/local/nhsystem/kali-arm64/etc/init.d/99nethunter
+#
+# Make executable:
+#   chmod +x /data/local/nhsystem/kali-arm64/etc/init.d/99nethunter
+#
+# Author: NetHunterZ
+
+### BEGIN INIT INFO
+# Provides:          nethunter
+# Required-Start:
+# Required-Stop:
+# Default-Start:     2 3 4 5
+# Default-Stop:      0 1 6
+# Short-Description: NetHunterZ initialisation
+# Description:       Sets up NetHunter paths, permissions and helper links.
+### END INIT INFO
+
+NH_FILES="/mnt/sdcard/nethunter/nh_files"
+CONFIGS_DST="/etc/nethunter"
+SCRIPTS_DST="/usr/local/bin"
+
+###############################################################################
+# Helpers
+###############################################################################
+nh_log() { echo "[NH] $*"; }
+
+###############################################################################
+# Setup configuration directory
+###############################################################################
+setup_configs() {
+    nh_log "Setting up NetHunter config directory..."
+    mkdir -p "$CONFIGS_DST"
+
+    if [ -f "$NH_FILES/configs/wlan.conf" ]; then
+        cp "$NH_FILES/configs/wlan.conf" "$CONFIGS_DST/wlan.conf"
+        nh_log "wlan.conf installed."
+    fi
+}
+
+###############################################################################
+# Set up helper symlinks
+###############################################################################
+setup_links() {
+    nh_log "Setting up helper symlinks..."
+
+    # Link bootkali into PATH if present on the host side
+    if [ -f /data/local/nhsystem/scripts/bootkali ]; then
+        ln -sf /data/local/nhsystem/scripts/bootkali "$SCRIPTS_DST/bootkali"
+        chmod +x "$SCRIPTS_DST/bootkali"
+    fi
+}
+
+###############################################################################
+# Ensure SSH host keys exist
+###############################################################################
+setup_ssh() {
+    if [ ! -f /etc/ssh/ssh_host_rsa_key ]; then
+        nh_log "Generating SSH host keys..."
+        ssh-keygen -A 2>/dev/null || true
+    fi
+}
+
+###############################################################################
+# Main
+###############################################################################
+case "$1" in
+    start|"")
+        nh_log "NetHunterZ init starting..."
+        setup_configs
+        setup_links
+        setup_ssh
+        nh_log "NetHunterZ init complete."
+        ;;
+    stop)
+        nh_log "NetHunterZ init stop (nothing to do)."
+        ;;
+    restart|reload)
+        $0 stop
+        $0 start
+        ;;
+    *)
+        echo "Usage: $0 {start|stop|restart}"
+        exit 1
+        ;;
+esac
+
+exit 0

@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Primary brand colors (dark hacker aesthetic) -->
+    <color name="colorPrimary">#1A1A2E</color>
+    <color name="colorPrimaryDark">#0F0F1A</color>
+    <color name="colorPrimaryVariant">#16213E</color>
+
+    <!-- Accent / secondary colors -->
+    <color name="colorAccent">#E94560</color>
+    <color name="colorSecondary">#E94560</color>
+    <color name="colorSecondaryVariant">#C73652</color>
+
+    <!-- Surface / background colors -->
+    <color name="colorSurface">#0F3460</color>
+    <color name="colorBackground">#1A1A2E</color>
+    <color name="colorError">#CF6679</color>
+
+    <!-- On-colors (text/icons on the above backgrounds) -->
+    <color name="colorOnPrimary">#FFFFFF</color>
+    <color name="colorOnSecondary">#FFFFFF</color>
+    <color name="colorOnSurface">#FFFFFF</color>
+    <color name="colorOnBackground">#FFFFFF</color>
+    <color name="colorOnError">#000000</color>
+
+    <!-- Toolbar / status bar -->
+    <color name="colorToolbar">#16213E</color>
+    <color name="colorStatusBar">#0F0F1A</color>
+
+    <!-- Text colors -->
+    <color name="textPrimary">#FFFFFF</color>
+    <color name="textSecondary">#B0B0C0</color>
+    <color name="textDisabled">#606070</color>
+
+    <!-- Terminal / output colors -->
+    <color name="termGreen">#39FF14</color>
+    <color name="termRed">#FF3131</color>
+    <color name="termYellow">#FFD700</color>
+    <color name="termBlue">#00BFFF</color>
+</resources>
