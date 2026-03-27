@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="108dp"
+    android:height="108dp"
+    android:viewportWidth="108"
+    android:viewportHeight="108">
+    <!-- Background circle -->
+    <path
+        android:fillColor="#FF0D0D0D"
+        android:pathData="M0,0 L108,0 L108,108 L0,108 Z" />
+    <!-- Outer ring (Kali red) -->
+    <path
+        android:fillColor="#FFE31837"
+        android:pathData="M54,12 A42,42 0 1,1 53.999,12 Z" />
+    <!-- Inner circle (dark surface) -->
+    <path
+        android:fillColor="#FF1A1A2E"
+        android:pathData="M54,22 A32,32 0 1,1 53.999,22 Z" />
+    <!-- Dragon silhouette (simplified) -->
+    <path
+        android:fillColor="#FFFFFFFF"
+        android:pathData="M54,30 C48,30 40,36 38,44 C36,52 40,58 44,60
+                          C42,64 38,68 36,72 L42,72 C44,68 46,64 50,62
+                          C51,63 52,64 54,64 C56,64 57,63 58,62
+                          C62,64 64,68 66,72 L72,72
+                          C70,68 66,64 64,60 C68,58 72,52 70,44
+                          C68,36 60,30 54,30 Z" />
+    <!-- Eyes (red) -->
+    <path
+        android:fillColor="#FFE31837"
+        android:pathData="M49,42 A3,3 0 1,1 48.999,42 Z" />
+    <path
+        android:fillColor="#FFE31837"
+        android:pathData="M59,42 A3,3 0 1,1 58.999,42 Z" />
+</vector>

@@ -1,0 +1,21 @@
+#!/bin/sh
+# nethunter – main launcher wrapper
+# Determines architecture and delegates to bootkali
+
+detect_arch() {
+    ABI=$(getprop ro.product.cpu.abi 2>/dev/null || uname -m)
+    case "$ABI" in
+        arm64*|aarch64) echo "kali-arm64" ;;
+        x86_64)         echo "kali-amd64" ;;
+        x86|i686)       echo "kali-i386"  ;;
+        *)              echo "kali-armhf" ;;
+    esac
+}
+
+ARCH=$(detect_arch)
+export NH_CHROOT_DIR="/data/local/nhsystem/$ARCH"
+SCRIPT_DIR="$(dirname "$(readlink -f "$0")")"
+
+echo "[NetHunter] Using chroot: $NH_CHROOT_DIR"
+
+exec "$SCRIPT_DIR/bootkali" "$@"

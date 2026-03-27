@@ -1,0 +1,188 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/colorBackground">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:padding="@dimen/padding_large">
+
+        <!-- Fix Status Card -->
+        <androidx.cardview.widget.CardView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="@dimen/margin_medium"
+            style="@style/Widget.NetHunter.CardView">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:padding="@dimen/card_padding"
+                android:gravity="center_vertical">
+
+                <ImageView
+                    android:id="@+id/iv_gps_icon"
+                    android:layout_width="40dp"
+                    android:layout_height="40dp"
+                    android:src="@drawable/ic_gps"
+                    android:contentDescription="GPS" />
+
+                <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:orientation="vertical"
+                    android:paddingStart="@dimen/padding_large">
+
+                    <TextView
+                        android:id="@+id/tv_fix_type"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="No Fix"
+                        android:textColor="@color/kali_red"
+                        android:textSize="@dimen/text_headline"
+                        android:textStyle="bold" />
+
+                    <TextView
+                        android:id="@+id/tv_satellites"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Satellites: 0"
+                        android:textColor="@color/kali_grey_light"
+                        android:textSize="@dimen/text_medium" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:gravity="center_vertical">
+
+                    <Button
+                        android:id="@+id/btn_start_gps"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginEnd="@dimen/margin_small"
+                        android:text="@string/btn_start_gps"
+                        style="@style/Widget.NetHunter.Button.Primary" />
+
+                    <Button
+                        android:id="@+id/btn_stop_gps"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/btn_stop_gps"
+                        style="@style/Widget.NetHunter.Button.Secondary" />
+                </LinearLayout>
+            </LinearLayout>
+        </androidx.cardview.widget.CardView>
+
+        <!-- Coordinates Card -->
+        <androidx.cardview.widget.CardView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="@dimen/margin_medium"
+            style="@style/Widget.NetHunter.CardView">
+
+            <GridLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:columnCount="2"
+                android:padding="@dimen/card_padding"
+                android:rowCount="4">
+
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_columnWeight="1"
+                    android:text="@string/label_latitude"
+                    android:textColor="@color/kali_grey_light" />
+                <TextView
+                    android:id="@+id/tv_latitude"
+                    android:layout_width="0dp"
+                    android:layout_columnWeight="1"
+                    android:text="0.000000°"
+                    android:textColor="@color/kali_white"
+                    android:textStyle="bold" />
+
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_columnWeight="1"
+                    android:text="@string/label_longitude"
+                    android:textColor="@color/kali_grey_light"
+                    android:paddingTop="@dimen/padding_small" />
+                <TextView
+                    android:id="@+id/tv_longitude"
+                    android:layout_width="0dp"
+                    android:layout_columnWeight="1"
+                    android:text="0.000000°"
+                    android:textColor="@color/kali_white"
+                    android:textStyle="bold"
+                    android:paddingTop="@dimen/padding_small" />
+
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_columnWeight="1"
+                    android:text="@string/label_altitude"
+                    android:textColor="@color/kali_grey_light"
+                    android:paddingTop="@dimen/padding_small" />
+                <TextView
+                    android:id="@+id/tv_altitude"
+                    android:layout_width="0dp"
+                    android:layout_columnWeight="1"
+                    android:text="0.0 m"
+                    android:textColor="@color/kali_white"
+                    android:paddingTop="@dimen/padding_small" />
+
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_columnWeight="1"
+                    android:text="@string/label_speed"
+                    android:textColor="@color/kali_grey_light"
+                    android:paddingTop="@dimen/padding_small" />
+                <TextView
+                    android:id="@+id/tv_speed"
+                    android:layout_width="0dp"
+                    android:layout_columnWeight="1"
+                    android:text="0.0 km/h"
+                    android:textColor="@color/kali_white"
+                    android:paddingTop="@dimen/padding_small" />
+            </GridLayout>
+        </androidx.cardview.widget.CardView>
+
+        <!-- NMEA Raw Card -->
+        <androidx.cardview.widget.CardView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            style="@style/Widget.NetHunter.CardView">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:padding="@dimen/card_padding">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/label_nmea_raw"
+                    android:textColor="@color/kali_grey_light"
+                    android:textSize="@dimen/text_small"
+                    android:paddingBottom="@dimen/padding_small" />
+
+                <TextView
+                    android:id="@+id/tv_nmea_raw"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:fontFamily="monospace"
+                    android:maxLines="4"
+                    android:text="—"
+                    android:textColor="@color/terminal_text"
+                    android:textSize="@dimen/terminal_text_size" />
+            </LinearLayout>
+        </androidx.cardview.widget.CardView>
+
+    </LinearLayout>
+</ScrollView>

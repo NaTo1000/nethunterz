@@ -1,0 +1,15 @@
+REM ============================================================
+REM NetHunter DuckHunter – Classic Rickroll
+REM Opens a browser and navigates to the well-known video.
+REM ============================================================
+
+DELAY 1000
+
+REM Open run dialog
+GUI r
+DELAY 600
+
+STRING cmd /c start https://www.youtube.com/watch?v=dQw4w9WgXcQ
+ENTER
+
+DELAY 500

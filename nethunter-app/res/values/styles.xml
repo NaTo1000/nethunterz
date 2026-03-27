@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <!-- Base application theme (dark Kali Linux look) -->
+    <style name="Theme.NetHunter" parent="Theme.MaterialComponents.DayNight.DarkActionBar">
+        <item name="colorPrimary">@color/colorPrimary</item>
+        <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
+        <item name="colorPrimaryVariant">@color/colorPrimaryVariant</item>
+        <item name="colorSecondary">@color/colorSecondary</item>
+        <item name="colorSecondaryVariant">@color/colorSecondaryVariant</item>
+        <item name="android:colorBackground">@color/colorBackground</item>
+        <item name="colorSurface">@color/colorSurface</item>
+        <item name="colorError">@color/colorError</item>
+        <item name="colorOnPrimary">@color/colorOnPrimary</item>
+        <item name="colorOnSecondary">@color/colorOnSecondary</item>
+        <item name="colorOnBackground">@color/colorOnBackground</item>
+        <item name="colorOnSurface">@color/colorOnSurface</item>
+        <item name="colorOnError">@color/colorOnError</item>
+        <item name="android:windowBackground">@color/colorBackground</item>
+        <item name="android:textColorPrimary">@color/kali_white</item>
+        <item name="android:textColorSecondary">@color/kali_grey_light</item>
+    </style>
+
+    <!-- No ActionBar variant (for splash / fullscreen activities) -->
+    <style name="Theme.NetHunter.NoActionBar">
+        <item name="windowActionBar">false</item>
+        <item name="windowNoTitle">true</item>
+    </style>
+
+    <!-- AppBar style -->
+    <style name="Theme.NetHunter.AppBarOverlay"
+        parent="ThemeOverlay.AppCompat.Dark.ActionBar" />
+
+    <!-- Popup style -->
+    <style name="Theme.NetHunter.PopupOverlay"
+        parent="ThemeOverlay.AppCompat.Light" />
+
+    <!-- Card style -->
+    <style name="Widget.NetHunter.CardView" parent="Widget.MaterialComponents.CardView">
+        <item name="cardBackgroundColor">@color/kali_dark_surface</item>
+        <item name="cardCornerRadius">@dimen/card_corner_radius</item>
+        <item name="cardElevation">@dimen/card_elevation</item>
+    </style>
+
+    <!-- Primary button -->
+    <style name="Widget.NetHunter.Button.Primary"
+        parent="Widget.MaterialComponents.Button">
+        <item name="backgroundTint">@color/kali_red</item>
+        <item name="android:textColor">@color/kali_white</item>
+        <item name="cornerRadius">@dimen/button_corner_radius</item>
+    </style>
+
+    <!-- Secondary (outlined) button -->
+    <style name="Widget.NetHunter.Button.Secondary"
+        parent="Widget.MaterialComponents.Button.OutlinedButton">
+        <item name="strokeColor">@color/kali_red</item>
+        <item name="android:textColor">@color/kali_red</item>
+    </style>
+
+    <!-- Terminal text view -->
+    <style name="Widget.NetHunter.Terminal">
+        <item name="android:fontFamily">monospace</item>
+        <item name="android:textColor">@color/terminal_text</item>
+        <item name="android:background">@color/terminal_background</item>
+        <item name="android:textSize">@dimen/terminal_text_size</item>
+        <item name="android:padding">@dimen/terminal_padding</item>
+    </style>
+
+</resources>

@@ -1,0 +1,96 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">NetHunter</string>
+    <string name="app_version">1.0.0</string>
+
+    <!-- Navigation -->
+    <string name="navigation_drawer_open">Open navigation drawer</string>
+    <string name="navigation_drawer_close">Close navigation drawer</string>
+    <string name="nav_gps">GPS</string>
+    <string name="nav_services">Services</string>
+    <string name="nav_terminal">Terminal</string>
+    <string name="nav_settings">Settings</string>
+
+    <!-- Service control -->
+    <string name="service_starting">NetHunter service starting…</string>
+    <string name="service_stopping">NetHunter service stopping…</string>
+    <string name="start_service">Start Service</string>
+    <string name="stop_service">Stop Service</string>
+    <string name="restart_service">Restart Service</string>
+    <string name="service_running">Running</string>
+    <string name="service_stopped">Stopped</string>
+    <string name="service_error">Error</string>
+
+    <!-- Root warning -->
+    <string name="warning_no_root_title">Root Not Available</string>
+    <string name="warning_no_root_message">NetHunter requires root (su) access to function correctly. Some or all features will be unavailable without a rooted device.</string>
+
+    <!-- Permissions -->
+    <string name="permissions_denied_warning">Some permissions were denied. NetHunter may not work correctly.</string>
+
+    <!-- GPS Fragment -->
+    <string name="gps_title">GPS / NMEA</string>
+    <string name="label_latitude">Latitude</string>
+    <string name="label_longitude">Longitude</string>
+    <string name="label_altitude">Altitude</string>
+    <string name="label_speed">Speed</string>
+    <string name="label_heading">Heading</string>
+    <string name="label_satellites">Satellites</string>
+    <string name="label_fix_type">Fix Type</string>
+    <string name="label_hdop">HDOP</string>
+    <string name="label_nmea_raw">Raw NMEA</string>
+    <string name="btn_start_gps">Start GPS</string>
+    <string name="btn_stop_gps">Stop GPS</string>
+    <string name="gps_no_fix">No Fix</string>
+    <string name="gps_connected">GPS Connected</string>
+    <string name="gps_disconnected">GPS Disconnected</string>
+
+    <!-- Services Fragment -->
+    <string name="services_title">Services</string>
+    <string name="no_services">No services registered</string>
+    <string name="btn_refresh">Refresh</string>
+
+    <!-- Terminal Fragment -->
+    <string name="terminal_title">Terminal</string>
+    <string name="terminal_ready">NetHunter Terminal Ready</string>
+    <string name="terminal_hint">Enter command…</string>
+    <string name="btn_send">Send</string>
+    <string name="btn_clear_terminal">Clear</string>
+
+    <!-- Settings -->
+    <string name="settings_title">Settings</string>
+    <string name="pref_start_on_boot">Start on boot</string>
+    <string name="pref_start_on_boot_summary">Automatically start NetHunter services when the device boots</string>
+    <string name="pref_chroot_path">Chroot path</string>
+    <string name="pref_chroot_path_summary">Override the default Kali chroot directory</string>
+    <string name="pref_log_level">Log level</string>
+    <string name="pref_enable_mock_location">Enable mock location</string>
+    <string name="pref_enable_mock_location_summary">Inject parsed GPS coordinates as mock Android location</string>
+    <string name="pref_gps_daemon_host">GPS daemon host</string>
+    <string name="pref_gps_daemon_port">GPS daemon port</string>
+    <string name="pref_category_general">General</string>
+    <string name="pref_category_gps">GPS</string>
+    <string name="pref_category_advanced">Advanced</string>
+
+    <!-- About -->
+    <string name="about_title">About NetHunter</string>
+    <string name="about_message">NetHunter is an Android penetration testing platform based on Kali Linux.</string>
+
+    <!-- Item service -->
+    <string name="service_start_action">Start</string>
+    <string name="service_stop_action">Stop</string>
+    <string name="service_status_idle">Idle</string>
+
+    <!-- Menu -->
+    <string name="menu_start_service">Start Service</string>
+    <string name="menu_stop_service">Stop Service</string>
+    <string name="menu_about">About</string>
+    <string name="menu_refresh">Refresh</string>
+    <string name="menu_clear_log">Clear Log</string>
+    <string name="menu_settings">Settings</string>
+
+    <!-- Errors -->
+    <string name="error_root_required">Root access is required for this operation.</string>
+    <string name="error_chroot_not_installed">Kali chroot is not installed. Please install NetHunter chroot from the official source.</string>
+    <string name="error_generic">An unexpected error occurred. Check the logs for details.</string>
+</resources>

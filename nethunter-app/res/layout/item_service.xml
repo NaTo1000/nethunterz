@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.cardview.widget.CardView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="@dimen/item_service_height"
+    android:layout_margin="@dimen/card_margin"
+    style="@style/Widget.NetHunter.CardView">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:gravity="center_vertical"
+        android:orientation="horizontal"
+        android:padding="@dimen/padding_medium">
+
+        <!-- Status indicator dot -->
+        <View
+            android:id="@+id/view_status_dot"
+            android:layout_width="@dimen/status_dot_size"
+            android:layout_height="@dimen/status_dot_size"
+            android:background="@drawable/ic_launcher"
+            android:layout_marginEnd="@dimen/margin_medium" />
+
+        <!-- Service icon -->
+        <ImageView
+            android:id="@+id/iv_service_icon"
+            android:layout_width="@dimen/item_icon_size"
+            android:layout_height="@dimen/item_icon_size"
+            android:src="@drawable/ic_service"
+            android:contentDescription="service icon"
+            android:layout_marginEnd="@dimen/margin_medium" />
+
+        <!-- Name + status -->
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/tv_service_name"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textColor="@color/kali_white"
+                android:textSize="@dimen/text_large"
+                android:textStyle="bold"
+                android:text="Service Name" />
+
+            <TextView
+                android:id="@+id/tv_service_status"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textColor="@color/kali_grey_light"
+                android:textSize="@dimen/text_small"
+                android:text="Stopped" />
+        </LinearLayout>
+
+        <!-- Start / Stop toggle -->
+        <com.google.android.material.switchmaterial.SwitchMaterial
+            android:id="@+id/switch_service"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:contentDescription="toggle service"
+            app:thumbTint="@color/kali_white"
+            app:trackTint="@color/kali_red" />
+
+    </LinearLayout>
+</androidx.cardview.widget.CardView>
