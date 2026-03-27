@@ -1,0 +1,33 @@
+name: Flipper Zero Firmware
+on:
+  push:
+    branches: ["main", "copilot/**", "feature/**"]
+  pull_request:
+    branches: ["main"]
+permissions:
+  contents: read
+jobs:
+  firmware-check:
+    name: Flipper Firmware Validation
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+          cache: pip
+      - name: Install dependencies
+        run: pip install -r requirements.txt
+      - name: Validate firmware modules
+        run: |
+          python -c "
+          from flipper import (
+              AIOFlipper, AIUpdater, FirmwareBuilder,
+              NayDoeV1GUI, SplashScreen, Scenes80s,
+              OTAUpdater, SecurityManager, CompanionBridge,
+          )
+          from cloud import CloudFilesystem, GDriveSync, OneDriveSync, VPSSync
+          print('All modules imported successfully')
+          "
+      - name: Run firmware tests
+        run: pytest tests/ -v --tb=short -k "flipper or cloud"
