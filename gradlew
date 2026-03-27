@@ -54,7 +54,7 @@
 # below.
 #
 # (3) To avoid ambiguity, the "Gradle" jar is always referred to as
-#     "gradient jar", and the script itself as "Gradle wrapper".
+#     "Gradle jar", and the script itself as "Gradle wrapper".
 ##############################################################################
 
 # Attempt to set APP_HOME
